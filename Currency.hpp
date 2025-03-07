@@ -1,0 +1,14 @@
+/// Currency.hpp - Manages Gold System
+#ifndef CURRENCY_HPP
+#define CURRENCY_HPP
+
+class Currency {
+private:
+    int gold;
+public:
+    Currency();
+    void addGold(int amount);
+    bool spendGold(int amount);
+    int getGold() const;
+};
+#endif
