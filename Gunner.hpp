@@ -5,7 +5,6 @@
 class Gunner : public Pirate {
 public:
     Gunner(const std::string &textureFile, float x, float y);
-    void attack(Predator* enemy) override;
     Bullet* fireBullet(float deltaTime) override;
 };
 #endif

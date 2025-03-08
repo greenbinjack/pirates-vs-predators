@@ -49,7 +49,8 @@ void Game::run() {
                 battleground->render(window);
                 break;
             case GAME_OVER:
-                exit(0);
+                gameOverScreen.display(window);
+                gameOverScreen.handleInput(window, *this);
                 break;
         }
 

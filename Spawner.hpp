@@ -3,22 +3,22 @@
 #include "Predator.hpp"
 #include <vector>
 #include <SFML/Graphics.hpp>
+#include <SFML/System/Clock.hpp>
 
 class Spawner {
 private:
     std::vector<Predator*> enemies;
-    float spawnTimer;
-    float spawnRate;  // Time between spawns
-    sf::Texture predatorTexture;  // Store texture for efficiency
-
+    float spawnRate;
+    sf::Clock spawnClock;
+    sf::Texture predatorTexture;
 public:
     Spawner();
     ~Spawner();
     
     void update(float deltaTime);
     void render(sf::RenderWindow &window);
-    void spawnEnemy();  // Function to spawn new enemies
-    std::vector<Predator*>& getEnemies();  // Allows access to enemies
-    void clearEnemies ();
+    void spawnEnemy();
+    std::vector<Predator*>& getEnemies();
+    void clearEnemies();
 };
 #endif

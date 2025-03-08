@@ -4,6 +4,7 @@
 #include "MenuScreen.hpp"
 #include "Instructions.hpp"
 #include "HighScore.hpp"
+#include "GameOver.hpp"
 
 // Forward declaration instead of #include "BattleGround.hpp"
 class BattleGround;
@@ -20,6 +21,7 @@ private:
     Instructions instructions;
     HighScore highScore;
     BattleGround* battleground;  // Change from direct object to pointer
+    GameOver gameOverScreen;
 public:
     Game();
     void run();

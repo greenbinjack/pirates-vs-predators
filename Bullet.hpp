@@ -9,8 +9,7 @@ private:
 
 public:
     Bullet(const std::string &textureFile, float x, float y, float speed, int damage);
-    void update(float deltaTime) override;  // 🔹 Override update function
-    void move(float deltaTime);
-    int getDamage() const;
+    void update(float deltaTime) override;  // Use update() instead of move()
+    int getDamage() const { return damage; }
 };
 #endif

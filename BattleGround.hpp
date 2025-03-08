@@ -11,6 +11,7 @@
 #include "Collision.hpp"
 #include "Game.hpp"
 #include "Bullet.hpp"
+#include "GameOver.hpp"
 #include <vector>
 
 class BattleGround {

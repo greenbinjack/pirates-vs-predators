@@ -4,20 +4,19 @@
 #include "Bullet.hpp"
 #include "Predator.hpp"
 #include <vector>
+#include <SFML/System/Clock.hpp>
 
 class Pirate : public Entity {
 protected:
     int attackPower;
     float attackSpeed;
-    float timeSinceLastShot;
-
+    float bulletSpeed;
+    sf::Clock fireCooldown;  // Timer for firing bullets
 public:
-    Pirate(const std::string &textureFile, float x, float y, int attackPower, float attackSpeed);
-    virtual ~Pirate() override {}  // 🔹 Add virtual destructor
+    Pirate(const std::string &textureFile, float x, float y, int attackPower, float attackSpeed, float bulletSpeed);
+    virtual ~Pirate() override {}
 
-    virtual void attack(Predator* enemy) = 0;  // 🔹 Ensure this is implemented
-    virtual Bullet* fireBullet(float deltaTime) = 0;  // 🔹 Ensure this is implemented
-
+    virtual Bullet* fireBullet(float deltaTime);
     void update(float deltaTime) override;
     void render(sf::RenderWindow &window) override;
 };

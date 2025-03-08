@@ -131,6 +131,13 @@ void BattleGround::update(float deltaTime) {
     spawner.update(deltaTime);
     grid.update();
 
+    for (Predator* enemy : spawner.getEnemies()) {
+        if (enemy->getPosition().x <= 360) {
+            std::cout << "[DEBUG] Predator reached base! GAME OVER!\n";
+            game->changeState(Game::GAME_OVER);
+            return;  // Exit function immediately
+        }
+    }
     // std::cout << "[DEBUG] Bullets in game: " << bullets.size() << std::endl;  // Print bullet count
     
     // Handle Pirate Attacks
@@ -150,7 +157,7 @@ void BattleGround::update(float deltaTime) {
     // Move Bullets & Check for Collision
     for (auto it = bullets.begin(); it != bullets.end();) {
         Bullet* bullet = *it;
-        bullet->move(deltaTime);
+        bullet->update(deltaTime);
 
         bool bulletHit = false;
         for (Predator* enemy : spawner.getEnemies()) {
@@ -184,7 +191,7 @@ void BattleGround::update(float deltaTime) {
 void BattleGround::updateBullets(float deltaTime) {
     for (auto it = bullets.begin(); it != bullets.end();) {
         Bullet* bullet = *it;
-        bullet->move(deltaTime);
+        bullet->update(deltaTime);
         
         bool bulletHit = false;
         for (Predator* enemy : spawner.getEnemies()) {
