@@ -19,5 +19,6 @@ public:
     void render(sf::RenderWindow &window);
     void spawnEnemy();  // Function to spawn new enemies
     std::vector<Predator*>& getEnemies();  // Allows access to enemies
+    void clearEnemies ();
 };
 #endif

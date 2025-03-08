@@ -26,12 +26,6 @@ void Game::run() {
     sf::Clock clock;
 
     while (window.isOpen()) {
-        // sf::Event event;
-        // while (window.pollEvent(event)) {
-        //     if (event.type == sf::Event::Closed) {
-        //         window.close();
-        //     }
-        // }
 
         float deltaTime = clock.restart().asSeconds();
         window.clear();
@@ -43,9 +37,11 @@ void Game::run() {
                 break;
             case INSTRUCTIONS:
                 instructions.display(window);
+                instructions.handleInput(window, *this);
                 break;
             case HIGHSCORE:
                 highScore.display(window);
+                highScore.handleInput(window, *this);
                 break;
             case BATTLE:
                 battleground->handleInput(window);
@@ -63,4 +59,18 @@ void Game::run() {
 
 void Game::changeState(GameState newState) {
     currentState = newState;
+}
+
+
+
+void Game::restartGame(bool isMenu) {
+    std::cout << "[DEBUG] Restarting the Game..." << std::endl;
+
+    // **Delete and Recreate BattleGround**
+    delete battleground;
+    battleground = new BattleGround(this);
+
+    // **Reset to Battle State**
+    if (isMenu) changeState (MENU);
+    else changeState(BATTLE);
 }

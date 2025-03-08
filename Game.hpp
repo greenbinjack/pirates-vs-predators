@@ -25,5 +25,6 @@ public:
     void run();
     void changeState(GameState newState);
     sf::RenderWindow& getWindow();  // Function to get the window reference
+    void restartGame(bool isMenu);
 };
 #endif

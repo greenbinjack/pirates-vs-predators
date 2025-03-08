@@ -30,6 +30,12 @@ private:
     sf::Texture gunnerCardTexture, cannonShooterCardTexture;
     sf::Sprite gunnerCard, cannonShooterCard;
 
+    sf::Texture pauseButtonTexture, resumeButtonTexture, restartButtonTexture, quitButtonTexture;
+    sf::Sprite pauseButton, resumeButton, restartButton, quitButton;
+    sf::RectangleShape pauseBackground;
+    bool isPaused;
+
+
     // 🔹 Store the selected pirate type
     enum SelectedPirate { NONE, GUNNER, CANNON_SHOOTER };
     SelectedPirate selectedPirate;

@@ -18,3 +18,7 @@ bool Currency::spendGold(int amount) {
 int Currency::getGold() const {
     return gold;
 }
+
+void Currency::resetGold () {
+    gold = 234234;
+}

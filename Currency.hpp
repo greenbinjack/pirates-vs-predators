@@ -7,6 +7,7 @@ private:
     int gold;
 public:
     Currency();
+    void resetGold ();
     void addGold(int amount);
     bool spendGold(int amount);
     int getGold() const;

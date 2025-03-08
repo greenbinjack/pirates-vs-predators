@@ -3,10 +3,11 @@
 #include "Gunner.hpp"
 #include <iostream>
 
-BattleGround::BattleGround(Game* game) : game(game), grid(6, 10), currency() {
+BattleGround::BattleGround(Game* game) : game(game), grid(7, 13), currency() {
     if (!backgroundTexture.loadFromFile("assets/battleground_background.png")) {
         std::cerr << "[ERROR] Failed to load battle background!" << std::endl;
     }
+
     background.setTexture(backgroundTexture);
     background.setScale(Game::scaleX, Game::scaleY);  // Scale background correctly
 
@@ -22,6 +23,7 @@ BattleGround::BattleGround(Game* game) : game(game), grid(6, 10), currency() {
     goldText.setCharacterSize(36 * Game::scaleX);  // Scale text size
     goldText.setFillColor(sf::Color::Yellow);
     goldText.setPosition(800 * Game::scaleX, 20 * Game::scaleY);
+
     updateGoldText();
 
     // 🔹 Load Pirate Selection Cards
@@ -43,57 +45,96 @@ BattleGround::BattleGround(Game* game) : game(game), grid(6, 10), currency() {
     cannonShooterCard.setPosition(50 * Game::scaleX, 400 * Game::scaleY);
 
     selectedPirate = NONE;  // No pirate selected initially
+
+    // Load Pause Button
+    if (!pauseButtonTexture.loadFromFile("assets/pause_button.png")) {
+        std::cerr << "[ERROR] Failed to load Pause Button!" << std::endl;
+    }
+    pauseButton.setTexture(pauseButtonTexture);
+    pauseButton.setPosition(1700 * Game::scaleX, 20 * Game::scaleY);
+    pauseButton.setScale(Game::scaleX, Game::scaleY);
+
+    // Load Pause Menu Buttons
+    if (!resumeButtonTexture.loadFromFile("assets/resume_button.png") ||
+        !restartButtonTexture.loadFromFile("assets/restart_button.png") ||
+        !quitButtonTexture.loadFromFile("assets/quit_button_small.png")) {
+        std::cerr << "[ERROR] Failed to load Pause Menu Buttons!" << std::endl;
+    }
+
+    resumeButton.setTexture(resumeButtonTexture);
+    restartButton.setTexture(restartButtonTexture);
+    quitButton.setTexture(quitButtonTexture);
+
+    // Position Buttons in the Center of the Screen
+    resumeButton.setPosition(800 * Game::scaleX, 400 * Game::scaleY);
+    restartButton.setPosition(800 * Game::scaleX, 550 * Game::scaleY);
+    quitButton.setPosition(800 * Game::scaleX, 700 * Game::scaleY);
+
+    resumeButton.setScale(Game::scaleX, Game::scaleY);
+    restartButton.setScale(Game::scaleX, Game::scaleY);
+    quitButton.setScale(Game::scaleX, Game::scaleY);
+
+    // Create Pause Background
+    pauseBackground.setSize(sf::Vector2f(600 * Game::scaleX, 400 * Game::scaleY));
+    pauseBackground.setFillColor(sf::Color(0, 0, 0, 150)); // Transparent Black
+    pauseBackground.setPosition(660 * Game::scaleX, 300 * Game::scaleY);
+
+    isPaused = false;
+     
 }
 
 void BattleGround::render(sf::RenderWindow &window) {
-    window.draw(background);
+    if (isPaused) {
+        // Draw Pause Background and Buttons
+        window.draw(pauseBackground);
+        window.draw(resumeButton);
+        window.draw(restartButton);
+        window.draw(quitButton);
+    } else {
+        window.draw(background);
 
-    // 🔹 Draw Grid with Scaling
-    for (int row = 0; row < 6; row++) {
-        for (int col = 0; col < 10; col++) {
-            sf::RectangleShape cell(sf::Vector2f(cellWidth * Game::scaleX, cellHeight * Game::scaleY));
-            cell.setPosition((400 + col * cellWidth) * Game::scaleX, (200 + row * cellHeight) * Game::scaleY);
-            cell.setOutlineThickness(2);
-            cell.setOutlineColor(sf::Color::Black);
-            cell.setFillColor(sf::Color(139, 69, 19));  // Wood color
-            window.draw(cell);
+        // Draw Grid with Scaling
+        for (int row = 0; row < 7; row++) {
+            for (int col = 0; col < 10; col++) {
+                sf::RectangleShape cell(sf::Vector2f(cellWidth * Game::scaleX, cellHeight * Game::scaleY));
+                cell.setPosition((360 + col * cellWidth) * Game::scaleX, (120 + row * cellHeight) * Game::scaleY);
+                cell.setFillColor(sf::Color::Transparent);
+                // cell.setOutlineThickness(0.5);
+                // cell.setOutlineColor(sf::Color::Black);
+                window.draw(cell);
+            }
         }
-    }
 
-    // 🔹 Draw Gold UI with Scaling
-    goldText.setPosition(800 * Game::scaleX, 20 * Game::scaleY);
-    goldText.setCharacterSize(36 * Game::scaleX);
-    window.draw(goldText);
+        // Draw Gold UI
+        window.draw(goldText);
 
-    // 🔹 Draw Pirate Selection Cards
-    gunnerCard.setScale(Game::scaleX, Game::scaleY);  // Scale cards properly
-    cannonShooterCard.setScale(Game::scaleX, Game::scaleY);
+        // Draw Pirate Cards
+        window.draw(gunnerCard);
+        window.draw(cannonShooterCard);
 
-    gunnerCard.setPosition(50 * Game::scaleX, 200 * Game::scaleY);  // Adjust position
-    cannonShooterCard.setPosition(50 * Game::scaleX, 400 * Game::scaleY);
+        // Draw Pirates and Predators
+        grid.render(window);
+        spawner.render(window);
 
-    window.draw(gunnerCard);
-    window.draw(cannonShooterCard);
+        // Draw Bullets
+        for (Bullet* bullet : bullets) {
+            window.draw(bullet->getSprite());
+        }
 
-    // 🔹 Draw Pirates and Predators
-    grid.render(window);
-    spawner.render(window);
-
-    // Draw Bullets
-    for (Bullet* bullet : bullets) {
-        window.draw(bullet->getSprite());  // 🔹 Draw each bullet
+        // Draw Pause Button
+        window.draw(pauseButton);
     }
 }
 
-
 void BattleGround::update(float deltaTime) {
+    if (isPaused) return;  // 🔹 Skip update if paused
     spawner.update(deltaTime);
     grid.update();
 
     // std::cout << "[DEBUG] Bullets in game: " << bullets.size() << std::endl;  // Print bullet count
     
     // Handle Pirate Attacks
-    for (int y = 0; y < 6; ++y) {
+    for (int y = 0; y < 7; ++y) {
         for (int x = 0; x < 10; ++x) {
             Pirate* pirate = dynamic_cast<Pirate*>(grid.getEntity(x, y));
             if (pirate) {
@@ -181,40 +222,41 @@ void BattleGround::handleInput(sf::RenderWindow &window) {
             window.close();
         }
 
-        // 🔹 Check for Single Click on Pirate Cards
         if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left) {
             sf::Vector2i pixelPos = sf::Mouse::getPosition(window);
             sf::Vector2f worldPos = window.mapPixelToCoords(pixelPos);
 
-            // 🔹 Debug Click Position
-            std::cout << "[DEBUG] Mouse Clicked at: X=" << worldPos.x << ", Y=" << worldPos.y << std::endl;
+            if (!isPaused) {
+                // Check Pause Button Click
+                if (pauseButton.getGlobalBounds().contains(worldPos)) {
+                    isPaused = true;
+                    std::cout << "[DEBUG] Game Paused!" << std::endl;
+                    return;
+                }
 
-            // 🔹 Check for Card Selection
-            if (gunnerCard.getGlobalBounds().contains(worldPos)) {
-                selectedPirate = GUNNER;
-                std::cout << "[DEBUG] Gunner Selected!" << std::endl;
-                return;
-            } else if (cannonShooterCard.getGlobalBounds().contains(worldPos)) {
-                selectedPirate = CANNON_SHOOTER;
-                std::cout << "[DEBUG] Cannon Shooter Selected!" << std::endl;
-                return;
-            }
+                // Check for Pirate Selection
+                if (gunnerCard.getGlobalBounds().contains(worldPos)) {
+                    selectedPirate = GUNNER;
+                    std::cout << "[DEBUG] Gunner Selected!" << std::endl;
+                    return;
+                } else if (cannonShooterCard.getGlobalBounds().contains(worldPos)) {
+                    selectedPirate = CANNON_SHOOTER;
+                    std::cout << "[DEBUG] Cannon Shooter Selected!" << std::endl;
+                    return;
+                }
 
-            // 🔹 Convert Click to Grid Coordinates
-            int col = (worldPos.x - 400) / cellWidth;
-            int row = (worldPos.y - 200) / cellHeight;
+                // Convert Click to Grid Coordinates
+                int col = (worldPos.x - 360) / cellWidth;
+                int row = (worldPos.y - 120) / cellHeight;
 
-            if (col >= 0 && col < 10 && row >= 0 && row < 6) {
-                std::cout << "[DEBUG] Click Detected on Grid Cell: (" << col << ", " << row << ")" << std::endl;
-
-                if (selectedPirate != NONE) {
+                if (col >= 0 && col < 10 && row >= 0 && row < 7 && selectedPirate != NONE) {
                     if (currency.getGold() >= 50) {
                         Pirate* newPirate = nullptr;
 
                         if (selectedPirate == GUNNER) {
-                            newPirate = new Gunner("assets/gunner.png", col * cellWidth + 400, row * cellHeight + 200);
+                            newPirate = new Gunner("assets/gunner.png", col * cellWidth + 360, row * cellHeight + 120);
                         } else if (selectedPirate == CANNON_SHOOTER) {
-                            newPirate = new CannonShooter("assets/cannonshooter.png", col * cellWidth + 400, row * cellHeight + 200);
+                            newPirate = new CannonShooter("assets/cannonshooter.png", col * cellWidth + 360, row * cellHeight + 120);
                         }
 
                         if (newPirate) {
@@ -223,17 +265,34 @@ void BattleGround::handleInput(sf::RenderWindow &window) {
                                 std::cout << "[DEBUG] Pirate Placed at (" << col << ", " << row << ")" << std::endl;
                                 currency.spendGold(50);
                                 updateGoldText();
-                                selectedPirate = NONE;  // Reset selection
                             } else {
                                 std::cout << "[DEBUG] Cell Occupied! Could Not Place Pirate." << std::endl;
                                 delete newPirate;
                             }
                         }
+                        selectedPirate = NONE;  // Reset selection
                     } else {
                         std::cout << "[DEBUG] Not Enough Gold!" << std::endl;
                     }
+                }
+            } else {
+                // **Handle Pause Menu Button Clicks**
+                if (resumeButton.getGlobalBounds().contains(worldPos)) {
+                    isPaused = false;
+                    std::cout << "[DEBUG] Game Resumed!" << std::endl;
+                } 
+                else if (restartButton.getGlobalBounds().contains(worldPos)) {
+                    std::cout << "[DEBUG] Restarting Game!" << std::endl;
+                    game->restartGame(0);  // o for BATTLE
+                } 
+                else if (quitButton.getGlobalBounds().contains(worldPos)) {
+                    std::cout << "[DEBUG] Quitting to Menu!" << std::endl;
+                    game->restartGame(1); // 1 for MENU
+                    return;
                 }
             }
         }
     }
 }
+
+

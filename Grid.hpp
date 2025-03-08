@@ -16,5 +16,6 @@ public:
     void render(sf::RenderWindow &window);
     Entity* getEntity(int x, int y);
     Pirate* getPirate(int x, int y);  // 🔹 Only declare it, do NOT define here
+    void clearPirates ();
 };
 #endif
