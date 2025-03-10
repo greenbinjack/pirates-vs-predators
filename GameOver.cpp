@@ -1,8 +1,7 @@
 #include "GameOver.hpp"
-#include "Game.hpp"
 #include <iostream>
 
-GameOver::GameOver() {
+GameOver::GameOver(Game *game) : game(game) {
     if (!backgroundTexture.loadFromFile("assets/gameover_screen.png")) {
         std::cerr << "[ERROR] Failed to load game over background!" << std::endl;
     }
@@ -22,18 +21,24 @@ GameOver::GameOver() {
     gameOverText.setFont(font);
     gameOverText.setString("Game Over");
     gameOverText.setCharacterSize(72);
-    gameOverText.setFillColor(sf::Color::Red);
+    gameOverText.setFillColor(sf::Color::Black);
     gameOverText.setPosition(750, 300);
+
+    finalScoreText.setFont(font);
+    finalScoreText.setCharacterSize(72);
+    finalScoreText.setFillColor(sf::Color::Red);
+    finalScoreText.setPosition(750, 400);
 }
 
 void GameOver::display(sf::RenderWindow &window) {
     window.draw(background);
     window.draw(gameOverText);
+    window.draw(finalScoreText);  // ✅ Draw final score    
     window.draw(menuButton);
     window.display ();
 }
 
-void GameOver::handleInput(sf::RenderWindow &window, Game &game) {
+void GameOver::handleInput(sf::RenderWindow &window) {
     sf::Event event;
     while (window.pollEvent(event)) {
         if (event.type == sf::Event::Closed) {
@@ -46,8 +51,13 @@ void GameOver::handleInput(sf::RenderWindow &window, Game &game) {
 
             if (menuButton.getGlobalBounds().contains(worldPos)) {
                 std::cout << "[DEBUG] Menu Button Clicked! Returning to Menu." << std::endl;
-                game.restartGame (true);
+                game->saveScore();  // ✅ Save score before exiting
+                game->restartGame (true);
             }
         }
     }
+}
+
+void GameOver::updateFinalScore(int score) {
+    finalScoreText.setString("Final Score: " + std::to_string(score));
 }

@@ -1,4 +1,3 @@
-/// BattleGround.cpp - Implementation of BattleGround
 #include "BattleGround.hpp"
 #include "Gunner.hpp"
 #include <iostream>
@@ -23,8 +22,13 @@ BattleGround::BattleGround(Game* game) : game(game), grid(7, 13), currency() {
     goldText.setCharacterSize(36 * Game::scaleX);  // Scale text size
     goldText.setFillColor(sf::Color::Yellow);
     goldText.setPosition(800 * Game::scaleX, 20 * Game::scaleY);
-
     updateGoldText();
+
+    scoreText.setFont(font);
+    scoreText.setCharacterSize(36 * Game::scaleX);
+    scoreText.setFillColor(sf::Color::White);
+    scoreText.setPosition(1000 * Game::scaleX, 20 * Game::scaleY);
+    updateScoreText();
 
     // 🔹 Load Pirate Selection Cards
     if (!gunnerCardTexture.loadFromFile("assets/gunner_card.png") ||
@@ -107,6 +111,7 @@ void BattleGround::render(sf::RenderWindow &window) {
 
         // Draw Gold UI
         window.draw(goldText);
+        window.draw (scoreText);
 
         // Draw Pirate Cards
         window.draw(gunnerCard);
@@ -127,7 +132,7 @@ void BattleGround::render(sf::RenderWindow &window) {
 }
 
 void BattleGround::update(float deltaTime) {
-    if (isPaused) return;  // 🔹 Skip update if paused
+    if (isPaused) return; 
     spawner.update(deltaTime);
     grid.update();
 
@@ -135,7 +140,7 @@ void BattleGround::update(float deltaTime) {
         if (enemy->getPosition().x <= 360) {
             std::cout << "[DEBUG] Predator reached base! GAME OVER!\n";
             game->changeState(Game::GAME_OVER);
-            return;  // Exit function immediately
+            return;  
         }
     }
     // std::cout << "[DEBUG] Bullets in game: " << bullets.size() << std::endl;  // Print bullet count
@@ -180,6 +185,8 @@ void BattleGround::update(float deltaTime) {
         if (enemy->isDefeated()) {
             delete enemy;
             it = spawner.getEnemies().erase(it);
+            game->addScore(100);  // ✅ Increase score by 100
+            updateScoreText();
             currency.addGold(10);  // Reward player for killing a predator
             updateGoldText();
         } else {
@@ -302,4 +309,6 @@ void BattleGround::handleInput(sf::RenderWindow &window) {
     }
 }
 
-
+void BattleGround::updateScoreText() {
+    scoreText.setString("Score: " + std::to_string(game->getScore()));
+}

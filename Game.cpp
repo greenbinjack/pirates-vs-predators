@@ -1,5 +1,4 @@
 #include "Game.hpp"
-#include "BattleGround.hpp"
 #include <iostream>
 
 // 🔹 Define base resolution
@@ -7,8 +6,9 @@ sf::Vector2u Game::baseResolution = sf::Vector2u(1920, 1080);
 float Game::scaleX = 1.0f;
 float Game::scaleY = 1.0f;
 
-Game::Game() : window(sf::VideoMode(1920, 1080), "Pirates vs Predators"), currentState(MENU) {
+Game::Game() : window(sf::VideoMode(1920, 1080), "Pirates vs Predators"), currentState(MENU), score(0) {
     battleground = new BattleGround(this);  // Initialize pointer
+    gameOverScreen = new GameOver(this);  // ✅ Initialize GameOver correctly
     
     // 🔹 Calculate scaling factors based on actual window size
     sf::Vector2u windowSize = window.getSize();
@@ -49,8 +49,9 @@ void Game::run() {
                 battleground->render(window);
                 break;
             case GAME_OVER:
-                gameOverScreen.display(window);
-                gameOverScreen.handleInput(window, *this);
+                gameOverScreen->updateFinalScore (score);
+                gameOverScreen->display(window);
+                gameOverScreen->handleInput(window);
                 break;
         }
 
@@ -72,6 +73,24 @@ void Game::restartGame(bool isMenu) {
     battleground = new BattleGround(this);
 
     // **Reset to Battle State**
-    if (isMenu) changeState (MENU);
-    else changeState(BATTLE);
+    if (isMenu) {
+        changeState (MENU);
+        score = 0;
+    } else {
+        changeState(BATTLE);
+    }
+}
+
+void Game::addScore(int points) {
+    score += points;  // ✅ Increase score
+    std::cout << "[DEBUG] Score: " << score << std::endl;
+}
+
+void Game::saveScore() {
+    highScore.addNewScore (score);
+    score = 0;  // ✅ Reset score after saving
+}
+
+int Game::getScore () {
+    return score;
 }

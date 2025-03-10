@@ -36,6 +36,7 @@ private:
     sf::RectangleShape pauseBackground;
     bool isPaused;
 
+    sf::Text scoreText;  // ✅ Add score UI
 
     // 🔹 Store the selected pirate type
     enum SelectedPirate { NONE, GUNNER, CANNON_SHOOTER };
@@ -48,5 +49,6 @@ public:
     bool placePirate(int x, int y, Pirate* pirate);
     void updateGoldText();
     void updateBullets(float deltaTime);
+    void updateScoreText();
 };
 #endif

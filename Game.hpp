@@ -4,10 +4,11 @@
 #include "MenuScreen.hpp"
 #include "Instructions.hpp"
 #include "HighScore.hpp"
+#include "BattleGround.hpp"
 #include "GameOver.hpp"
 
-// Forward declaration instead of #include "BattleGround.hpp"
 class BattleGround;
+class GameOver;
 
 class Game {
 public:
@@ -17,16 +18,20 @@ public:
 private:
     sf::RenderWindow window;
     GameState currentState;
+    int score;
     MenuScreen menu;
     Instructions instructions;
     HighScore highScore;
     BattleGround* battleground;  // Change from direct object to pointer
-    GameOver gameOverScreen;
+    GameOver* gameOverScreen;
 public:
     Game();
     void run();
     void changeState(GameState newState);
     sf::RenderWindow& getWindow();  // Function to get the window reference
+    void addScore(int points);  // ✅ Function to increase score
+    void saveScore();    
+    int getScore ();
     void restartGame(bool isMenu);
 };
 #endif
