@@ -28,6 +28,12 @@ GameOver::GameOver(Game *game) : game(game) {
     finalScoreText.setCharacterSize(72);
     finalScoreText.setFillColor(sf::Color::Red);
     finalScoreText.setPosition(750, 400);
+
+    playerNameText.setFont(font);
+    playerNameText.setCharacterSize(72);
+    playerNameText.setFillColor(sf::Color::White);
+    playerNameText.setPosition(750, 450);
+
 }
 
 void GameOver::display(sf::RenderWindow &window) {
@@ -35,6 +41,7 @@ void GameOver::display(sf::RenderWindow &window) {
     window.draw(gameOverText);
     window.draw(finalScoreText);  // ✅ Draw final score    
     window.draw(menuButton);
+    window.draw(playerNameText);
     window.display ();
 }
 
@@ -58,6 +65,7 @@ void GameOver::handleInput(sf::RenderWindow &window) {
     }
 }
 
-void GameOver::updateFinalScore(int score) {
+void GameOver::updateFinalScore(int score, const std::string& name) {
     finalScoreText.setString("Final Score: " + std::to_string(score));
+    playerNameText.setString("Player: " + name);
 }

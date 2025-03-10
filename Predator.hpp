@@ -6,6 +6,8 @@ class Predator : public Entity {
 private:
     int health;
     float speed;
+    sf::Clock collisionTimer;  // ✅ Timer for movement delay
+    bool isPaused;  // ✅ Whether the predator is paused
 
 public:
     Predator(const std::string &textureFile, float x, float y, int health, float speed);
@@ -13,5 +15,6 @@ public:
     void render(sf::RenderWindow &window) override;
     void takeDamage(int damage);
     bool isDefeated() const;
+    void pauseMovement();
 };
 #endif

@@ -15,11 +15,12 @@ private:
     sf::Font font;
     sf::Text gameOverText;
     sf::Text finalScoreText;  // ✅ Display final score
+    sf::Text playerNameText;
 public:
     GameOver(Game* game);
     void display(sf::RenderWindow &window);
     void handleInput(sf::RenderWindow &window);
-    void updateFinalScore(int score);
+    void updateFinalScore(int score, const std::string &name);
 };
 
 #endif

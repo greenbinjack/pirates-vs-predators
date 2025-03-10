@@ -16,7 +16,7 @@ private:
     sf::Sprite backButton;
     sf::Font font;
     sf::Text highScoreText;
-    std::vector<int> scores;
+    std::vector< std::pair <int, std::string> > scores;
     void loadScores();
     void saveScores();
     void updateHighScoreText();
@@ -24,7 +24,7 @@ public:
     HighScore();
     void display(sf::RenderWindow &window);
     void handleInput(sf::RenderWindow &window, Game &game);
-    void addNewScore(int score);
+    void addNewScore(int score, const std::string &name);
 };
 
 #endif // HIGHSCORE_HPP

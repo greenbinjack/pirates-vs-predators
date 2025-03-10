@@ -46,11 +46,10 @@ Pirate* Grid::getPirate(int x, int y) {
     return dynamic_cast<Pirate*>(cells[y][x]);
 }
 
-void Grid::clearPirates() {
-    for (int y = 0; y < rows; ++y) {
-        for (int x = 0; x < cols; ++x) {
-            delete cells[y][x];  // Clear pirates from the grid
-            cells[y][x] = nullptr;
-        }
+void Grid::removePirate(int x, int y) {
+    if (cells[y][x] != nullptr) {
+        delete cells[y][x];  // ✅ Free memory
+        cells[y][x] = nullptr;  // ✅ Remove from grid
+        std::cout << "[DEBUG] Pirate at (" << x << ", " << y << ") removed!\n";
     }
 }

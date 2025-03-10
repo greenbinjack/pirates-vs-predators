@@ -4,6 +4,7 @@
 #include <iostream>
 #include <fstream>
 #include <algorithm>
+#include <string>
 
 HighScore::HighScore() {
     loadScores();
@@ -29,29 +30,32 @@ HighScore::HighScore() {
 void HighScore::loadScores() {
     std::ifstream file("assets/highscores.txt");
     if (!file) {
-        std::cerr << "Error loading highscores file!" << std::endl;
+        std::cerr << "[ERROR] Failed to load highscores!" << std::endl;
         return;
     }
-    int score;
+    
     scores.clear();
-    while (file >> score) {
-        scores.push_back(score);
+    
+    std::string name;
+    int score;
+    while (file >> score >> name) {  // ✅ Read name and score
+        scores.push_back({score, name});
     }
     file.close();
-    std::sort(scores.rbegin(), scores.rend()); // Sort in descending order
+    sort (scores.rbegin (), scores.rend ());
     updateHighScoreText();
 }
 
 void HighScore::saveScores() {
     std::ofstream file("assets/highscores.txt");
     for (size_t i = 0; i < std::min(scores.size(), size_t(5)); i++) {
-        file << scores[i] << std::endl;
+        file << scores[i].first << ' ' << scores[i].second << std::endl;
     }
     file.close();
 }
 
-void HighScore::addNewScore(int score) {
-    scores.push_back(score);
+void HighScore::addNewScore(int score, const std::string& name) {
+    scores.push_back({score, name});
     std::sort(scores.rbegin(), scores.rend()); // Keep highest at the top
     while (scores.size() > 5) {
         scores.pop_back(); // Keep only top 5
@@ -63,7 +67,7 @@ void HighScore::addNewScore(int score) {
 void HighScore::updateHighScoreText() {
     std::string content = "High Scores:\n";
     for (size_t i = 0; i < scores.size(); i++) {
-        content += std::to_string(i + 1) + ". " + std::to_string(scores[i]) + "\n";
+        content += std::to_string(i + 1) + ". " + scores[i].second + " - " + std::to_string(scores[i].first) + "\n";
     }
     highScoreText.setString(content);
 }

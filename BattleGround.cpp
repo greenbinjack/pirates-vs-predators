@@ -144,6 +144,27 @@ void BattleGround::update(float deltaTime) {
         }
     }
     // std::cout << "[DEBUG] Bullets in game: " << bullets.size() << std::endl;  // Print bullet count
+
+    // ✅ Check for predator-pirate collisions
+    for (Predator* enemy : spawner.getEnemies()) {
+        int col = (enemy->getPosition().x - 360) / cellWidth;  // ✅ Convert x position to grid column
+        int row = (enemy->getPosition().y - 120) / cellHeight;  // ✅ Convert y position to grid row
+
+        if (col >= 0 && col < 10 && row >= 0 && row < 7) {  // ✅ Ensure valid grid position
+            Pirate* pirate = grid.getPirate(col, row);
+            if (pirate) {
+                std::cout << "[DEBUG] Predator collided with pirate at (" << col << ", " << row << ")\n";
+                grid.removePirate(col, row);  // ✅ Remove the pirate
+                enemy->pauseMovement();  // ✅ Pause predator for 1 second
+            }
+        }
+
+        if (enemy->getPosition().x <= 360) {
+            std::cout << "[DEBUG] Predator reached base! GAME OVER!\n";
+            game->changeState(Game::GAME_OVER);
+            return;  
+        }
+    }
     
     // Handle Pirate Attacks
     for (int y = 0; y < 7; ++y) {

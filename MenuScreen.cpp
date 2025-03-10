@@ -68,6 +68,7 @@ void MenuScreen::handleInput(sf::RenderWindow &window, Game &game) {
         if (event.type == sf::Event::Closed) {
             window.close();
         }
+           
 
         if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left) {
             sf::Vector2i pixelPos = sf::Mouse::getPosition(window);
@@ -77,7 +78,7 @@ void MenuScreen::handleInput(sf::RenderWindow &window, Game &game) {
 
             if (startButton.getGlobalBounds().contains(worldPos)) {
                 std::cout << "[DEBUG] Start Button Clicked!" << std::endl;
-                game.changeState(Game::BATTLE);
+                game.changeState(Game::ENTER_NAME);
             } else if (instructionsButton.getGlobalBounds().contains(worldPos)) {
                 std::cout << "[DEBUG] Instructions Button Clicked!" << std::endl;
                 game.changeState(Game::INSTRUCTIONS);
