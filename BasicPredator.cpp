@@ -1,9 +1,7 @@
 #include "BasicPredator.hpp"
-
-const int HEALTH = 100;
-const float SPEED = 2.0f;
+#include "Constants.hpp"
 
 BasicPredator::BasicPredator(const std::string &textureFile, float x, float y) 
-  : Predator(textureFile, x, y, HEALTH, SPEED) {}
+  : Predator(textureFile, x, y, BASIC_PREDATOR_HEALTH, BASIC_PREDATOR_SPEED) {}
     
 void BasicPredator:: update(float deltaTime) override { move(deltaTime); }

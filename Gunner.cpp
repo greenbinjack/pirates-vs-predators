@@ -1,13 +1,14 @@
 #include "Gunner.hpp"
+#include "Constants.hpp"
 #include <iostream>
 
-const int ATTACK_POWER = 10;
-const float ATTACK_SPEED = 1.5;
-const float BULLET_SPEED = 600;
-
 Gunner::Gunner(const std::string &textureFile, float x, float y)
-    : Pirate(textureFile, x, y, ATTACK_POWER, ATTACK_SPEED, BULLET_SPEED) {}
+    : Pirate(textureFile, x, y, GUNNER_ATTACK_POWER, GUNNER_ATTACK_SPEED, GUNNER_BULLET_SPEED) {}
 
 Bullet* Gunner::fireBullet(float deltaTime) {
-    return Pirate::fireBullet(deltaTime);
+    if (fireCooldown.getElapsedTime().asSeconds() >= attackSpeed) {
+        fireCooldown.restart();
+        return new Bullet(IMG_BULLET, position.x + 65, position.y + 40, bulletSpeed, attackPower);
+    }
+    return nullptr;
 }

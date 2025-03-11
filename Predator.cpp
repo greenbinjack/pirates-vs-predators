@@ -1,22 +1,20 @@
 #include "Predator.hpp"
+#include "Constants.hpp"
 #include <iostream>
-
-const float COLLISION_DELAY = 1.0f;
-const int MOVEMENT_FACTOR = 50;
 
 Predator::Predator(const std::string &textureFile, float x, float y, int health, float speed)
     : Entity(textureFile, x, y), health(health), speed(speed), isPaused(false) {}
 
 void Predator::update(float deltaTime) {
     if (isPaused) {
-        if (collisionTimer.getElapsedTime().asSeconds() >= COLLISION_DELAY) {  
+        if (collisionTimer.getElapsedTime().asSeconds() >= PREDATOR_COLLISION_DELAY) {  
             isPaused = false;  
         } else {
             return;  
         }
     }
 
-    position.x -= speed * deltaTime * MOVEMENT_FACTOR;  // Move left
+    position.x -= speed * deltaTime * PREDATOR_MOVEMENT_FACTOR;  // Move left
     sprite.setPosition(position);
 }
 

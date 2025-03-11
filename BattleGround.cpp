@@ -8,7 +8,6 @@ BattleGround::BattleGround(Game* game) : game(game), grid(7, 13), currency() {
     }
 
     background.setTexture(backgroundTexture);
-    background.setScale(Game::scaleX, Game::scaleY);  // Scale background correctly
 
     cellWidth = 120;
     cellHeight = 120;
@@ -19,15 +18,15 @@ BattleGround::BattleGround(Game* game) : game(game), grid(7, 13), currency() {
 
     // 🔹 Gold UI Scaling
     goldText.setFont(font);
-    goldText.setCharacterSize(36 * Game::scaleX);  // Scale text size
+    goldText.setCharacterSize(36);  // Scale text size
     goldText.setFillColor(sf::Color::Yellow);
-    goldText.setPosition(800 * Game::scaleX, 20 * Game::scaleY);
+    goldText.setPosition(800, 20);
     updateGoldText();
 
     scoreText.setFont(font);
-    scoreText.setCharacterSize(36 * Game::scaleX);
+    scoreText.setCharacterSize(36);
     scoreText.setFillColor(sf::Color::White);
-    scoreText.setPosition(1000 * Game::scaleX, 20 * Game::scaleY);
+    scoreText.setPosition(1000, 20);
     updateScoreText();
 
     // 🔹 Load Pirate Selection Cards
@@ -42,11 +41,8 @@ BattleGround::BattleGround(Game* game) : game(game), grid(7, 13), currency() {
     gunnerCard.setTexture(gunnerCardTexture);
     cannonShooterCard.setTexture(cannonShooterCardTexture);
 
-    gunnerCard.setScale(Game::scaleX, Game::scaleY);
-    cannonShooterCard.setScale(Game::scaleX, Game::scaleY);
-
-    gunnerCard.setPosition(50 * Game::scaleX, 200 * Game::scaleY);  // Adjust position with scaling
-    cannonShooterCard.setPosition(50 * Game::scaleX, 400 * Game::scaleY);
+    gunnerCard.setPosition(50, 200);  // Adjust position with scaling
+    cannonShooterCard.setPosition(50, 400);
 
     selectedPirate = NONE;  // No pirate selected initially
 
@@ -55,8 +51,7 @@ BattleGround::BattleGround(Game* game) : game(game), grid(7, 13), currency() {
         std::cerr << "[ERROR] Failed to load Pause Button!" << std::endl;
     }
     pauseButton.setTexture(pauseButtonTexture);
-    pauseButton.setPosition(1700 * Game::scaleX, 20 * Game::scaleY);
-    pauseButton.setScale(Game::scaleX, Game::scaleY);
+    pauseButton.setPosition(1700, 20);
 
     // Load Pause Menu Buttons
     if (!resumeButtonTexture.loadFromFile("assets/resume_button.png") ||
@@ -70,18 +65,14 @@ BattleGround::BattleGround(Game* game) : game(game), grid(7, 13), currency() {
     quitButton.setTexture(quitButtonTexture);
 
     // Position Buttons in the Center of the Screen
-    resumeButton.setPosition(800 * Game::scaleX, 400 * Game::scaleY);
-    restartButton.setPosition(800 * Game::scaleX, 550 * Game::scaleY);
-    quitButton.setPosition(800 * Game::scaleX, 700 * Game::scaleY);
-
-    resumeButton.setScale(Game::scaleX, Game::scaleY);
-    restartButton.setScale(Game::scaleX, Game::scaleY);
-    quitButton.setScale(Game::scaleX, Game::scaleY);
+    resumeButton.setPosition(800, 400);
+    restartButton.setPosition(800, 550);
+    quitButton.setPosition(800, 700);
 
     // Create Pause Background
-    pauseBackground.setSize(sf::Vector2f(600 * Game::scaleX, 400 * Game::scaleY));
+    pauseBackground.setSize(sf::Vector2f(600, 400));
     pauseBackground.setFillColor(sf::Color(0, 0, 0, 150)); // Transparent Black
-    pauseBackground.setPosition(660 * Game::scaleX, 300 * Game::scaleY);
+    pauseBackground.setPosition(660, 300);
 
     isPaused = false;
      
@@ -100,8 +91,8 @@ void BattleGround::render(sf::RenderWindow &window) {
         // Draw Grid with Scaling
         for (int row = 0; row < 7; row++) {
             for (int col = 0; col < 10; col++) {
-                sf::RectangleShape cell(sf::Vector2f(cellWidth * Game::scaleX, cellHeight * Game::scaleY));
-                cell.setPosition((360 + col * cellWidth) * Game::scaleX, (120 + row * cellHeight) * Game::scaleY);
+                sf::RectangleShape cell(sf::Vector2f(cellWidth, cellHeight));
+                cell.setPosition((360 + col * cellWidth), (120 + row * cellHeight));
                 cell.setFillColor(sf::Color::Transparent);
                 // cell.setOutlineThickness(0.5);
                 // cell.setOutlineColor(sf::Color::Black);

@@ -6,13 +6,13 @@
 NameEntryScreen::NameEntryScreen() {
     loadFont (font, "assets/custom_font.ttf");
     promptText.setFont(font);
-    promptText.setCharacterSize(NAMEENTRYSCREEN_FONT);
+    promptText.setCharacterSize(FONT_LARGE);
     promptText.setFillColor(sf::Color::White);
     promptText.setString("Enter Your Name:");
     promptText.setPosition(NAMEENTRYSCREEN_X, NAMEENTRYSCREEN_Y);
 
     nameText.setFont(font);
-    nameText.setCharacterSize(NAMEENTRYSCREEN_FONT);
+    nameText.setCharacterSize(FONT_LARGE);
     nameText.setFillColor(sf::Color::Yellow);
     nameText.setPosition(NAMEENTRYSCREEN_X, NAMEENTRYSCREEN_Y + MENU_spacing + MENU_spacing);
 }

@@ -8,7 +8,6 @@ class Game;
 
 class NameEntryScreen {
 private:
-    Game* game;
     sf::Font font;
     sf::Text promptText;
     sf::Text nameText;
