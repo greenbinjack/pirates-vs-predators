@@ -1,5 +1,6 @@
 #ifndef MENUSCREEN_HPP
 #define MENUSCREEN_HPP
+
 #include <SFML/Graphics.hpp>
 
 class Game;

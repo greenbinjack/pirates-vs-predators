@@ -2,7 +2,6 @@
 #define NAMEENTRYSCREEN_HPP
 
 #include <SFML/Graphics.hpp>
-#include "Game.hpp"
 #include <string>
 
 class Game;
@@ -15,9 +14,9 @@ private:
     sf::Text nameText;
     sf::String playerName;
 public:
-    NameEntryScreen(Game* game);
+    NameEntryScreen();
     void display(sf::RenderWindow &window);
-    void handleInput(sf::RenderWindow &window);
+    void handleInput(sf::RenderWindow &window, Game &game);
     void resetName ();
 };
 

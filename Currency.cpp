@@ -1,7 +1,7 @@
-/// Currency.cpp - Implementation of Gold System
 #include "Currency.hpp"
+#include "Constants.hpp"
 
-Currency::Currency() : gold(234234) {}
+Currency::Currency() : gold(INITIAL_GOLD) {}
 
 void Currency::addGold(int amount) {
     gold += amount;
@@ -20,5 +20,5 @@ int Currency::getGold() const {
 }
 
 void Currency::resetGold () {
-    gold = 234234;
+    gold = INITIAL_GOLD;
 }

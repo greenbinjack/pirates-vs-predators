@@ -1,30 +1,19 @@
-/// Grid.cpp - Implementation of Grid System
 #include "Grid.hpp"
-#include "Pirate.hpp"  // Include here in .cpp
+#include "Pirate.hpp"  
 #include <iostream>
 
 Grid::Grid(int rows, int cols) : rows(rows), cols(cols) {
     cells.resize(rows, std::vector<Entity*>(cols, nullptr));
 }
 
-bool Grid::placePirate(int x, int y, Pirate* pirate) {
-    if (cells[y][x] == nullptr) {  // Ensure cell is empty
+bool Grid::placePirate (int x, int y, Pirate* pirate) {
+    if (cells[y][x] == nullptr) {  
         cells[y][x] = pirate;
         std::cout << "[DEBUG] Pirate added to grid at " << x << ", " << y << std::endl;
         return true;
     }
     std::cout << "[DEBUG] Cell occupied! Cannot place pirate at " << x << ", " << y << std::endl;
     return false;
-}
-
-void Grid::update() {
-    for (int y = 0; y < rows; ++y) {
-        for (int x = 0; x < cols; ++x) {
-            if (cells[y][x] != nullptr) {
-                cells[y][x]->update(0.1f); // Placeholder update time
-            }
-        }
-    }
 }
 
 void Grid::render(sf::RenderWindow &window) {
@@ -42,14 +31,10 @@ Entity* Grid::getEntity(int x, int y) {
   return cells[y][x]; 
 }
 
-Pirate* Grid::getPirate(int x, int y) {
-    return dynamic_cast<Pirate*>(cells[y][x]);
-}
-
-void Grid::removePirate(int x, int y) {
+void Grid::removeEntity(int x, int y) {
     if (cells[y][x] != nullptr) {
-        delete cells[y][x];  // ✅ Free memory
-        cells[y][x] = nullptr;  // ✅ Remove from grid
+        delete cells[y][x];  
+        cells[y][x] = nullptr;  
         std::cout << "[DEBUG] Pirate at (" << x << ", " << y << ") removed!\n";
     }
 }

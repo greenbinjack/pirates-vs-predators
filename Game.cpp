@@ -9,7 +9,6 @@ float Game::scaleY = 1.0f;
 Game::Game() : window(sf::VideoMode(1920, 1080), "Pirates vs Predators"), currentState(MENU), score(0) {
     battleground = new BattleGround(this);  // Initialize pointer
     gameOverScreen = new GameOver(this);  // ✅ Initialize GameOver correctly
-    nameEntryScreen = new NameEntryScreen (this);
     
     // 🔹 Calculate scaling factors based on actual window size
     sf::Vector2u windowSize = window.getSize();
@@ -37,8 +36,8 @@ void Game::run() {
                 menu.display(window);
                 break;
             case ENTER_NAME:
-                nameEntryScreen->handleInput(window);
-                nameEntryScreen->display(window);
+                nameEntryScreen.handleInput(window, *this);
+                nameEntryScreen.display(window);
                 break;
             case INSTRUCTIONS:
                 instructions.display(window);
@@ -82,7 +81,7 @@ void Game::restartGame(bool isMenu) {
         changeState (MENU);
         score = 0;
         playerName.clear (); 
-        nameEntryScreen->resetName ();   
+        nameEntryScreen.resetName ();   
     } else {
         changeState(BATTLE);
     }

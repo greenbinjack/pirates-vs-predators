@@ -1,21 +1,20 @@
 #include "NameEntryScreen.hpp"
+#include "Game.hpp" 
+#include "Constants.hpp"
 #include <iostream>
 
-NameEntryScreen::NameEntryScreen(Game* game) : game(game) {
-    if (!font.loadFromFile("assets/custom_font.ttf")) {
-        std::cerr << "[ERROR] Failed to load font!" << std::endl;
-    }
-
+NameEntryScreen::NameEntryScreen() {
+    loadFont (font, "assets/custom_font.ttf");
     promptText.setFont(font);
-    promptText.setCharacterSize(72);
+    promptText.setCharacterSize(NAMEENTRYSCREEN_FONT);
     promptText.setFillColor(sf::Color::White);
     promptText.setString("Enter Your Name:");
-    promptText.setPosition(700, 400);
+    promptText.setPosition(NAMEENTRYSCREEN_X, NAMEENTRYSCREEN_Y);
 
     nameText.setFont(font);
-    nameText.setCharacterSize(72);
+    nameText.setCharacterSize(NAMEENTRYSCREEN_FONT);
     nameText.setFillColor(sf::Color::Yellow);
-    nameText.setPosition(700, 500);
+    nameText.setPosition(NAMEENTRYSCREEN_X, NAMEENTRYSCREEN_Y + MENU_spacing + MENU_spacing);
 }
 
 void NameEntryScreen::display(sf::RenderWindow &window) {
@@ -25,7 +24,7 @@ void NameEntryScreen::display(sf::RenderWindow &window) {
     window.display();
 }
 
-void NameEntryScreen::handleInput(sf::RenderWindow &window) {
+void NameEntryScreen::handleInput(sf::RenderWindow &window, Game &game) {
     sf::Event event;
     while (window.pollEvent(event)) {
         if (event.type == sf::Event::Closed) {
@@ -33,17 +32,22 @@ void NameEntryScreen::handleInput(sf::RenderWindow &window) {
         }
 
         if (event.type == sf::Event::TextEntered) {
-            if (event.text.unicode < 128 && event.text.unicode != '\r') {
-                playerName += static_cast<char>(event.text.unicode);
+            char inputChar = static_cast<char>(event.text.unicode);
+            if (std::isalnum(inputChar)) {  
+                playerName += static_cast<char>(std::toupper(inputChar));
+            } 
+            else if (inputChar == 8 && !playerName.isEmpty()) {  
+                playerName.erase(playerName.getSize() - 1, 1);
             }
             nameText.setString(playerName);
         }
+        
 
         if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Enter) {
             if (!playerName.isEmpty()) {
                 std::cout << "[DEBUG] Player Name Set: " << playerName.toAnsiString() << std::endl;
-                game->setPlayerName(playerName.toAnsiString());
-                game->changeState(Game::BATTLE);
+                game.setPlayerName(playerName.toAnsiString());
+                game.changeState(Game::BATTLE);
             }
         }
     }

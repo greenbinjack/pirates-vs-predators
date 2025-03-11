@@ -134,7 +134,6 @@ void BattleGround::render(sf::RenderWindow &window) {
 void BattleGround::update(float deltaTime) {
     if (isPaused) return; 
     spawner.update(deltaTime);
-    grid.update();
 
     for (Predator* enemy : spawner.getEnemies()) {
         if (enemy->getPosition().x <= 360) {
@@ -151,10 +150,10 @@ void BattleGround::update(float deltaTime) {
         int row = (enemy->getPosition().y - 120) / cellHeight;  // ✅ Convert y position to grid row
 
         if (col >= 0 && col < 10 && row >= 0 && row < 7) {  // ✅ Ensure valid grid position
-            Pirate* pirate = grid.getPirate(col, row);
+            Pirate* pirate = dynamic_cast<Pirate*>(grid.getEntity(col, row));
             if (pirate) {
                 std::cout << "[DEBUG] Predator collided with pirate at (" << col << ", " << row << ")\n";
-                grid.removePirate(col, row);  // ✅ Remove the pirate
+                grid.removeEntity(col, row);  // ✅ Remove the pirate
                 enemy->pauseMovement();  // ✅ Pause predator for 1 second
             }
         }
@@ -187,7 +186,7 @@ void BattleGround::update(float deltaTime) {
 
         bool bulletHit = false;
         for (Predator* enemy : spawner.getEnemies()) {
-            if (Collision::checkCollision(bullet, enemy)) {
+            if (checkCollision(bullet, enemy)) {
                 enemy->takeDamage(bullet->getDamage());
                 delete bullet;
                 it = bullets.erase(it);
@@ -223,7 +222,7 @@ void BattleGround::updateBullets(float deltaTime) {
         
         bool bulletHit = false;
         for (Predator* enemy : spawner.getEnemies()) {
-            if (Collision::checkCollision(bullet, enemy)) {
+            if (checkCollision(bullet, enemy)) {
                 enemy->takeDamage(bullet->getDamage());
                 delete bullet;
                 it = bullets.erase(it);
@@ -332,4 +331,8 @@ void BattleGround::handleInput(sf::RenderWindow &window) {
 
 void BattleGround::updateScoreText() {
     scoreText.setString("Score: " + std::to_string(game->getScore()));
+}
+
+bool BattleGround::checkCollision(Entity* a, Entity* b) {
+    return a->getBounds().intersects(b->getBounds());
 }

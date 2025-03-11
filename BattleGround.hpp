@@ -8,7 +8,7 @@
 #include "Pirate.hpp"
 #include "Gunner.hpp"
 #include "CannonShooter.hpp"
-#include "Collision.hpp"
+#include "Entity.hpp"
 #include "Game.hpp"
 #include "Bullet.hpp"
 #include "GameOver.hpp"
@@ -50,5 +50,6 @@ public:
     void updateGoldText();
     void updateBullets(float deltaTime);
     void updateScoreText();
+    static bool checkCollision(Entity* a, Entity* b);
 };
 #endif

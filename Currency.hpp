@@ -1,4 +1,3 @@
-/// Currency.hpp - Manages Gold System
 #ifndef CURRENCY_HPP
 #define CURRENCY_HPP
 

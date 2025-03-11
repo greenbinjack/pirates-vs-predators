@@ -1,11 +1,18 @@
 #include "Spawner.hpp"
+#include "Constants.hpp"
 #include <iostream>
 #include <cstdlib>
+#include <ctime>
 
-Spawner::Spawner() : spawnRate(7.0f) {  // Start slow, speed up later
-    if (!predatorTexture.loadFromFile("assets/predator.png")) {
-        std::cerr << "[ERROR] Failed to load predator texture!" << std::endl;
+Spawner::Spawner() : spawnRate(INTITIAL_SPAWN_RATE) {  
+    try {
+        if (!predatorTexture.loadFromFile("assets/predator.png")) {
+            throw std::runtime_error("Failed to load predator texture!");
+        }
+    } catch (const std::exception& e) {
+        std::cerr << "[ERROR] " << e.what() << std::endl;
     }
+    std::srand(std::time(nullptr));
 }
 
 Spawner::~Spawner() {
@@ -19,28 +26,21 @@ void Spawner::update(float deltaTime) {
         spawnClock.restart();
         spawnEnemy();
         
-        if (spawnRate > 1.5f) {
-            spawnRate -= 0.2f;  // Make the game progressively harder
+        if (spawnRate > MAX_SPAWN_RATE) {
+            spawnRate -= DECREAMENT_RATE; 
             std::cout << "[DEBUG] New spawn rate: " << spawnRate << " seconds" << std::endl;
         }
     }
 
-    for (auto it = enemies.begin(); it != enemies.end();) {
+    for (auto it = enemies.begin(); it != enemies.end(); it++) {
         Predator* enemy = *it;
         enemy->update(deltaTime);
-        
-        if (enemy->getPosition().x <= 0) {
-            delete enemy;
-            it = enemies.erase(it);
-        } else {
-            ++it;
-        }
     }
 }
 
 void Spawner::spawnEnemy() {
     int spawnRow = rand() % 7;
-    Predator* newPredator = new Predator("assets/predator.png", 1920, spawnRow * 120 + 120, 100, 1.0f);
+    Predator* newPredator = new Predator("assets/predator.png", SPAWN_START_POSITION, spawnRow * CELL_SIZE + dCELL_SIZE, PREDATOR_HEALTH, PREDATOR_SPEED);
     enemies.push_back(newPredator);
 }
 

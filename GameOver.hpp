@@ -14,7 +14,7 @@ private:
     sf::Sprite menuButton;
     sf::Font font;
     sf::Text gameOverText;
-    sf::Text finalScoreText;  // ✅ Display final score
+    sf::Text finalScoreText; 
     sf::Text playerNameText;
 public:
     GameOver(Game* game);

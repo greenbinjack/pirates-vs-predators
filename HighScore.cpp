@@ -1,54 +1,56 @@
-/// HighScore.cpp - Implementation of HighScore Screen
 #include "HighScore.hpp"
-#include "Game.hpp"  // Add this line to access Game functions
+#include "Game.hpp"  
+#include "Constants.hpp"
+
 #include <iostream>
 #include <fstream>
 #include <algorithm>
-#include <string>
+#include <string>   
 
 HighScore::HighScore() {
     loadScores();
-    if (!backgroundTexture.loadFromFile("assets/highscore_screen.png")) {
-        std::cerr << "Error loading highscore background!" << std::endl;
-    }
-    background.setTexture(backgroundTexture);
-    if (!backButtonTexture.loadFromFile("assets/back_button.png")) {
-        std::cerr << "Error loading back button!" << std::endl;
-    }
-    backButton.setTexture(backButtonTexture);
-    backButton.setPosition(50, 600);
 
-    if (!font.loadFromFile("assets/custom_font.ttf")) {
-        std::cerr << "Error loading font!" << std::endl;
-    }
+    loadTexture(backgroundTexture, IMG_HIGHSCORE_SCREEN);
+    background.setTexture(backgroundTexture);
+
+    loadTexture(backButtonTexture, IMG_BACK_BUTTON);
+    backButton.setTexture(backButtonTexture);
+    backButton.setPosition(BACK_BUTTON_X, BACK_BUTTON_Y);
+
+    loadFont (font, "assets/custom_font.ttf");
     highScoreText.setFont(font);
-    highScoreText.setCharacterSize(24);
-    highScoreText.setFillColor(sf::Color::White);
-    highScoreText.setPosition(100, 150);
+    highScoreText.setCharacterSize(HIGHSCORE_FONT);
+    highScoreText.setFillColor(sf::Color::Black);
+    highScoreText.setPosition(HIGHSCORE_TEXT_X, HIGHSCORE_TEXT_Y);
 }
 
 void HighScore::loadScores() {
     std::ifstream file("assets/highscores.txt");
-    if (!file) {
-        std::cerr << "[ERROR] Failed to load highscores!" << std::endl;
-        return;
+    try {
+        if (!file) {
+            throw std::runtime_error("Failed to load highscores.txt file: ");
+        }
+    } catch (const std::exception& e) {
+        std::cerr << "[ERROR] " << e.what() << std::endl;
+        exit (0);
     }
     
     scores.clear();
     
     std::string name;
     int score;
-    while (file >> score >> name) {  // ✅ Read name and score
+    while (file >> score >> name) {  
         scores.push_back({score, name});
     }
     file.close();
+
     sort (scores.rbegin (), scores.rend ());
     updateHighScoreText();
 }
 
 void HighScore::saveScores() {
     std::ofstream file("assets/highscores.txt");
-    for (size_t i = 0; i < std::min(scores.size(), size_t(5)); i++) {
+    for (size_t i = 0; i < std::min(scores.size(), size_t(MAX_NUMBER_OF_SCORES_SHOWN)); i++) {
         file << scores[i].first << ' ' << scores[i].second << std::endl;
     }
     file.close();
@@ -56,16 +58,18 @@ void HighScore::saveScores() {
 
 void HighScore::addNewScore(int score, const std::string& name) {
     scores.push_back({score, name});
-    std::sort(scores.rbegin(), scores.rend()); // Keep highest at the top
-    while (scores.size() > 5) {
-        scores.pop_back(); // Keep only top 5
+    std::sort(scores.rbegin(), scores.rend()); 
+
+    while (scores.size() > MAX_NUMBER_OF_SCORES_SHOWN) {
+        scores.pop_back(); 
     }
+
     saveScores();
     updateHighScoreText();
 }
 
 void HighScore::updateHighScoreText() {
-    std::string content = "High Scores:\n";
+    std::string content = "";
     for (size_t i = 0; i < scores.size(); i++) {
         content += std::to_string(i + 1) + ". " + scores[i].second + " - " + std::to_string(scores[i].first) + "\n";
     }

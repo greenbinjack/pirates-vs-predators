@@ -2,7 +2,7 @@
 #include <iostream>
 
 const float COLLISION_DELAY = 1.0f;
-const int MOVEMENT_FACTOR = 100;
+const int MOVEMENT_FACTOR = 50;
 
 Predator::Predator(const std::string &textureFile, float x, float y, int health, float speed)
     : Entity(textureFile, x, y), health(health), speed(speed), isPaused(false) {}

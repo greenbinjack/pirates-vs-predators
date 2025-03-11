@@ -10,7 +10,6 @@
 
 class BattleGround;
 class GameOver;
-class NameEntryScreen;
 
 class Game {
 public:
@@ -27,7 +26,7 @@ private:
     HighScore highScore;
     BattleGround* battleground;  // Change from direct object to pointer
     GameOver* gameOverScreen;
-    NameEntryScreen* nameEntryScreen;
+    NameEntryScreen nameEntryScreen;
 public:
     Game();
     void run();

@@ -1,7 +1,6 @@
-/// HighScore.hpp - Header file for HighScore management
-#pragma once
 #ifndef HIGHSCORE_HPP
 #define HIGHSCORE_HPP
+
 #include <SFML/Graphics.hpp>
 #include <vector>
 #include <string>
@@ -12,11 +11,15 @@ class HighScore {
 private:
     sf::Texture backgroundTexture;
     sf::Sprite background;
+
     sf::Texture backButtonTexture;
     sf::Sprite backButton;
+
     sf::Font font;
     sf::Text highScoreText;
+
     std::vector< std::pair <int, std::string> > scores;
+    
     void loadScores();
     void saveScores();
     void updateHighScoreText();
@@ -27,4 +30,4 @@ public:
     void addNewScore(int score, const std::string &name);
 };
 
-#endif // HIGHSCORE_HPP
+#endif 

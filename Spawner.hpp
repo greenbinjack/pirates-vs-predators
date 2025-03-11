@@ -1,9 +1,10 @@
 #ifndef SPAWNER_HPP
 #define SPAWNER_HPP
+
 #include "Predator.hpp"
-#include <vector>
 #include <SFML/Graphics.hpp>
 #include <SFML/System/Clock.hpp>
+#include <vector>
 
 class Spawner {
 private:
