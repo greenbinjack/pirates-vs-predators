@@ -9,7 +9,7 @@ class MenuScreen {
 private:
     sf::Texture backgroundTexture;
     sf::Sprite background;
-    sf::Texture startButtonTexture, instructionsButtonTexture, quitButtonTexture, highscoreButtonTexture;
+    sf::Texture startButtonTexture, instructionsButtonTexture, returnToMenuButtonTexture, highscoreButtonTexture;
     sf::Sprite startButton, instructionsButton, quitButton, highscoreButton;
 public:
     MenuScreen();

@@ -15,12 +15,12 @@ MenuScreen::MenuScreen() {
     }
 
     try {
-        if (!startButtonTexture.loadFromFile("assets/start_button.png") || !instructionsButtonTexture.loadFromFile("assets/instructions_button.png") || !quitButtonTexture.loadFromFile("assets/quit_button.png") || !highscoreButtonTexture.loadFromFile("assets/highscore_button.png")) {
+        if (!startButtonTexture.loadFromFile("assets/start_button.png") || !instructionsButtonTexture.loadFromFile("assets/instructions_button.png") || !returnToMenuButtonTexture.loadFromFile("assets/quit_button.png") || !highscoreButtonTexture.loadFromFile("assets/highscore_button.png")) {
             throw std::runtime_error("Failed to load menu background!");
         }
         startButton.setTexture(startButtonTexture);
         instructionsButton.setTexture(instructionsButtonTexture);
-        quitButton.setTexture(quitButtonTexture);
+        quitButton.setTexture(returnToMenuButtonTexture);
         highscoreButton.setTexture(highscoreButtonTexture);
     } catch (const std::exception& e) {
         std::cerr << "[ERROR] " << e.what() << std::endl;

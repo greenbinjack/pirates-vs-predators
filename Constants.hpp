@@ -32,6 +32,7 @@ const int HIGHSCORE_TEXT_Y = 280;
 const int MAX_NUMBER_OF_SCORES_SHOWN = 10;
 
 const int FONT_LARGE = 72;
+const int FONT_SMALL = 36;
 const int NAMEENTRYSCREEN_X = 600;
 const int NAMEENTRYSCREEN_Y = 400;
 
@@ -60,11 +61,43 @@ const float CANNONSHOOTER_BULLET_SPEED = 500;
 const int BASIC_PREDATOR_HEALTH = 100;
 const float BASIC_PREDATOR_SPEED = 2.0f;
 
+const int GOLD_TEXT_X = 600;
+const int GOLD_TEXT_Y = 20;
+
+const int SCORE_TEXT_X = 1000;
+const int SCORE_TEXT_Y = 20;
+
+const int GUNNER_CARD_X = 100;
+const int GUNNER_CARD_Y = 200;
+
+const int CANNON_CARD_X = 100;
+const int CANNON_CARD_Y = 400;
+
+const int PAUSE_BTN_X = WINDOW_WIDTH - CELL_SIZE;
+const int PAUSE_BTN_Y = 0;
+
+const int PAUSE_START_X = 700;
+const int PAUSE_START_Y = 250;
+const int PAUSE_dY = 200;
+const int PAUSE_SPACING = 50;
+
+const int GRID_OFFSET_ROWS = 1;
+const int GRID_OFFSET_COLS = 3;
+const int GRID_ROWS = 7;
+const int GRID_COLS = 10;
+
 const std::string IMG_HIGHSCORE_SCREEN = "assets/highscore_screen.png";
 const std::string IMG_BACK_BUTTON = "assets/back_button.png";
 const std::string IMG_PREDATOR = "assets/predator.png";
 const std::string IMG_BULLET = "assets/bullet.png";
 const std::string IMG_CANNONBALL = "assets/cannonball.png";
-
+const std::string IMG_BATTLEGROUND_GRID = "assets/battleground_background.png";
+const std::string FONT_TTF_FILE = "assets/custom_font.ttf";
+const std::string IMG_GUNNER_CARD = "assets/gunner_card.png";
+const std::string IMG_CANNON_CARD = "assets/cannon_card.png";
+const std::string IMG_PAUSE_BTN = "assets/pause_button.png";
+const std::string IMG_RESUME_BTN = "assets/resume_button.png";
+const std::string IMG_RESTART_BTN = "assets/restart_button.png";
+const std::string IMG_RETURN_TO_MENU_BTN = "assets/quit_button_small.png";
 
 #endif // CONSTANTS_HPP

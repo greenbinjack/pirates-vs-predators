@@ -1,124 +1,78 @@
 #include "BattleGround.hpp"
 #include "Gunner.hpp"
+#include "Constants.hpp"
 #include <iostream>
 
-BattleGround::BattleGround(Game* game) : game(game), grid(7, 13), currency() {
-    if (!backgroundTexture.loadFromFile("assets/battleground_background.png")) {
-        std::cerr << "[ERROR] Failed to load battle background!" << std::endl;
-    }
-
+BattleGround::BattleGround(Game* game) : game(game), grid(GRID_ROWS, GRID_COLS), currency() {
+    loadTexture (backgroundTexture, IMG_BATTLEGROUND_GRID);
     background.setTexture(backgroundTexture);
 
-    cellWidth = 120;
-    cellHeight = 120;
+    loadFont (font, FONT_TTF_FILE);
 
-    if (!font.loadFromFile("assets/custom_font.ttf")) {
-        std::cerr << "[ERROR] Failed to load font!" << std::endl;
-    }
-
-    // 🔹 Gold UI Scaling
     goldText.setFont(font);
-    goldText.setCharacterSize(36);  // Scale text size
+    goldText.setCharacterSize(FONT_SMALL);  
     goldText.setFillColor(sf::Color::Yellow);
-    goldText.setPosition(800, 20);
+    goldText.setPosition(GOLD_TEXT_X, GOLD_TEXT_Y);
     updateGoldText();
 
     scoreText.setFont(font);
-    scoreText.setCharacterSize(36);
+    scoreText.setCharacterSize(FONT_SMALL);
     scoreText.setFillColor(sf::Color::White);
-    scoreText.setPosition(1000, 20);
+    scoreText.setPosition(SCORE_TEXT_X, SCORE_TEXT_Y);
     updateScoreText();
 
-    // 🔹 Load Pirate Selection Cards
-    if (!gunnerCardTexture.loadFromFile("assets/gunner_card.png") ||
-        !cannonShooterCardTexture.loadFromFile("assets/cannon_card.png")) {
-        std::cerr << "[ERROR] Failed to load pirate cards!" << std::endl;
-    } else {
-        std::cout << "[DEBUG] Pirate Cards Loaded Successfully!" << std::endl;
-    }
-
-    // 🔹 Scale and Position Pirate Cards Correctly
+    loadTexture (gunnerCardTexture, IMG_GUNNER_CARD);
+    loadTexture (cannonShooterCardTexture, IMG_CANNON_CARD);
     gunnerCard.setTexture(gunnerCardTexture);
     cannonShooterCard.setTexture(cannonShooterCardTexture);
+    gunnerCard.setPosition(GUNNER_CARD_X, GUNNER_CARD_Y);  
+    cannonShooterCard.setPosition(CANNON_CARD_X, CANNON_CARD_Y);
 
-    gunnerCard.setPosition(50, 200);  // Adjust position with scaling
-    cannonShooterCard.setPosition(50, 400);
+    selectedPirate = NONE; 
 
-    selectedPirate = NONE;  // No pirate selected initially
-
-    // Load Pause Button
-    if (!pauseButtonTexture.loadFromFile("assets/pause_button.png")) {
-        std::cerr << "[ERROR] Failed to load Pause Button!" << std::endl;
-    }
+    /** 
+     * PAUSE PHASE
+     */
+    loadTexture (pauseButtonTexture, IMG_PAUSE_BTN);
     pauseButton.setTexture(pauseButtonTexture);
-    pauseButton.setPosition(1700, 20);
+    pauseButton.setPosition(PAUSE_BTN_X, PAUSE_BTN_Y);
 
-    // Load Pause Menu Buttons
-    if (!resumeButtonTexture.loadFromFile("assets/resume_button.png") ||
-        !restartButtonTexture.loadFromFile("assets/restart_button.png") ||
-        !quitButtonTexture.loadFromFile("assets/quit_button_small.png")) {
-        std::cerr << "[ERROR] Failed to load Pause Menu Buttons!" << std::endl;
-    }
-
+    loadTexture (resumeButtonTexture, IMG_RESUME_BTN);
+    loadTexture (restartButtonTexture, IMG_RESTART_BTN);
+    loadTexture (returnToMenuButtonTexture, IMG_RETURN_TO_MENU_BTN);
     resumeButton.setTexture(resumeButtonTexture);
     restartButton.setTexture(restartButtonTexture);
-    quitButton.setTexture(quitButtonTexture);
+    quitButton.setTexture(returnToMenuButtonTexture);
 
-    // Position Buttons in the Center of the Screen
-    resumeButton.setPosition(800, 400);
-    restartButton.setPosition(800, 550);
-    quitButton.setPosition(800, 700);
-
-    // Create Pause Background
-    pauseBackground.setSize(sf::Vector2f(600, 400));
+    resumeButton.setPosition(PAUSE_START_X, PAUSE_START_Y);
+    restartButton.setPosition(PAUSE_START_X, PAUSE_START_Y + PAUSE_dY);
+    quitButton.setPosition(PAUSE_START_X, PAUSE_START_Y + 2 * PAUSE_dY);
     pauseBackground.setFillColor(sf::Color(0, 0, 0, 150)); // Transparent Black
-    pauseBackground.setPosition(660, 300);
 
     isPaused = false;
-     
 }
 
 void BattleGround::render(sf::RenderWindow &window) {
-    if (isPaused) {
-        // Draw Pause Background and Buttons
+    switch (isPaused) {
+    case true:
         window.draw(pauseBackground);
         window.draw(resumeButton);
         window.draw(restartButton);
         window.draw(quitButton);
-    } else {
+        break;
+    case false:
         window.draw(background);
-
-        // Draw Grid with Scaling
-        for (int row = 0; row < 7; row++) {
-            for (int col = 0; col < 10; col++) {
-                sf::RectangleShape cell(sf::Vector2f(cellWidth, cellHeight));
-                cell.setPosition((360 + col * cellWidth), (120 + row * cellHeight));
-                cell.setFillColor(sf::Color::Transparent);
-                // cell.setOutlineThickness(0.5);
-                // cell.setOutlineColor(sf::Color::Black);
-                window.draw(cell);
-            }
-        }
-
-        // Draw Gold UI
         window.draw(goldText);
         window.draw (scoreText);
-
-        // Draw Pirate Cards
         window.draw(gunnerCard);
         window.draw(cannonShooterCard);
-
-        // Draw Pirates and Predators
         grid.render(window);
         spawner.render(window);
-
-        // Draw Bullets
         for (Bullet* bullet : bullets) {
             bullet->render (window);
         }
-
-        // Draw Pause Button
         window.draw(pauseButton);
+        break;
     }
 }
 
@@ -137,8 +91,8 @@ void BattleGround::update(float deltaTime) {
 
     // ✅ Check for predator-pirate collisions
     for (Predator* enemy : spawner.getEnemies()) {
-        int col = (enemy->getPosition().x - 360) / cellWidth;  // ✅ Convert x position to grid column
-        int row = (enemy->getPosition().y - 120) / cellHeight;  // ✅ Convert y position to grid row
+        int col = (enemy->getPosition().x - 360) / CELL_SIZE;  // ✅ Convert x position to grid column
+        int row = (enemy->getPosition().y - 120) / CELL_SIZE;  // ✅ Convert y position to grid row
 
         if (col >= 0 && col < 10 && row >= 0 && row < 7) {  // ✅ Ensure valid grid position
             Pirate* pirate = dynamic_cast<Pirate*>(grid.getEntity(col, row));
@@ -271,17 +225,17 @@ void BattleGround::handleInput(sf::RenderWindow &window) {
                 }
 
                 // Convert Click to Grid Coordinates
-                int col = (worldPos.x - 360) / cellWidth;
-                int row = (worldPos.y - 120) / cellHeight;
+                int col = (worldPos.x - 360) / CELL_SIZE;
+                int row = (worldPos.y - 120) / CELL_SIZE;
 
                 if (col >= 0 && col < 10 && row >= 0 && row < 7 && selectedPirate != NONE) {
                     if (currency.getGold() >= 50) {
                         Pirate* newPirate = nullptr;
 
                         if (selectedPirate == GUNNER) {
-                            newPirate = new Gunner("assets/gunner.png", col * cellWidth + 360, row * cellHeight + 120);
+                            newPirate = new Gunner("assets/gunner.png", col * CELL_SIZE + 360, row * CELL_SIZE + 120);
                         } else if (selectedPirate == CANNON_SHOOTER) {
-                            newPirate = new CannonShooter("assets/cannonshooter.png", col * cellWidth + 360, row * cellHeight + 120);
+                            newPirate = new CannonShooter("assets/cannonshooter.png", col * CELL_SIZE + 360, row * CELL_SIZE + 120);
                         }
 
                         if (newPirate) {
