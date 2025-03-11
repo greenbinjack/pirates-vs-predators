@@ -1,5 +1,6 @@
 #ifndef ENTITY_HPP
 #define ENTITY_HPP
+
 #include <SFML/Graphics.hpp>
 
 class Entity {
@@ -9,16 +10,15 @@ protected:
     sf::Vector2f position;
 
 public:
-    Entity(const std::string &textureFile, float x, float y);
+    Entity (const std::string &textureFile, float x, float y);
     virtual ~Entity() = default;
 
-    virtual void update(float deltaTime) = 0;
-    virtual void render(sf::RenderWindow &window);
-
-    sf::FloatRect getBounds() const { return sprite.getGlobalBounds(); }
+    sf::FloatRect getBounds() const;
+    sf::Vector2f getPosition() const;
+    sf::Sprite& getSprite();
     
-    // 🔹 Added getter function
-    sf::Vector2f getPosition() const { return position; }
-    sf::Sprite& getSprite() { return sprite; }  // 🔹 Add this function
+    virtual void render(sf::RenderWindow &window) = 0;
+    virtual void update(float deltaTime) = 0;
 };
+
 #endif

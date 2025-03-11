@@ -1,19 +1,22 @@
 #include "Predator.hpp"
 #include <iostream>
 
+const float COLLISION_DELAY = 1.0f;
+const int MOVEMENT_FACTOR = 100;
+
 Predator::Predator(const std::string &textureFile, float x, float y, int health, float speed)
     : Entity(textureFile, x, y), health(health), speed(speed), isPaused(false) {}
 
 void Predator::update(float deltaTime) {
     if (isPaused) {
-        if (collisionTimer.getElapsedTime().asSeconds() >= 1.0f) {  
-            isPaused = false;  // ✅ Resume movement after 1 second
+        if (collisionTimer.getElapsedTime().asSeconds() >= COLLISION_DELAY) {  
+            isPaused = false;  
         } else {
-            return;  // ✅ Stay paused
+            return;  
         }
     }
 
-    position.x -= speed * deltaTime * 100;  // Move left
+    position.x -= speed * deltaTime * MOVEMENT_FACTOR;  // Move left
     sprite.setPosition(position);
 }
 
@@ -33,6 +36,6 @@ bool Predator::isDefeated() const {
 }
 
 void Predator::pauseMovement() {
-    isPaused = true;  // ✅ Pause movement
+    isPaused = true;  
     collisionTimer.restart();
 }

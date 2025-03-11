@@ -1,5 +1,6 @@
 #ifndef GUNNER_HPP
 #define GUNNER_HPP
+
 #include "Pirate.hpp"
 
 class Gunner : public Pirate {

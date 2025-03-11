@@ -123,7 +123,7 @@ void BattleGround::render(sf::RenderWindow &window) {
 
         // Draw Bullets
         for (Bullet* bullet : bullets) {
-            window.draw(bullet->getSprite());
+            bullet->render (window);
         }
 
         // Draw Pause Button

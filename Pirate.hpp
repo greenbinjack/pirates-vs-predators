@@ -1,5 +1,6 @@
 #ifndef PIRATE_HPP
 #define PIRATE_HPP
+
 #include "Entity.hpp"
 #include "Bullet.hpp"
 #include "Predator.hpp"
@@ -20,4 +21,5 @@ public:
     void update(float deltaTime) override;
     void render(sf::RenderWindow &window) override;
 };
+
 #endif
