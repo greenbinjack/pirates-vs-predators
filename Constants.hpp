@@ -7,21 +7,38 @@
 const int CELL_SIZE = 120;
 const int dCELL_SIZE = 120;
 
+const int WINDOW_WIDTH = 1920;
+const int WINDOW_HEIGHT = 1080;
+
 const int BULLET_MOVEMENT_FACTOR = 6;
 
-const float INTITIAL_SPAWN_RATE = 12.0;
+const float INTITIAL_SPAWN_RATE = 10.0;
 const float MAX_SPAWN_RATE = 2.0;
 const float DECREAMENT_RATE = 0.2;
-const int SPAWN_START_POSITION = 1920;
+const int SPAWN_START_POSITION = WINDOW_WIDTH - CELL_SIZE;
 
 const int PREDATOR_RHINOMAN_HEALTH = 300;
-const float PREDATOR_RHINOMAN_SPEED = 0.33;
+const float PREDATOR_RHINOMAN_SPEED = 0.5;
 
 const int PREDATOR_SNAKEMAN_HEALTH = 50;
 const float PREDATOR_SNAKEMAN_SPEED = 2;
 
 const int PREDATOR_ALIENMAN_HEALTH = 100;
 const float PREDATOR_ALIENMAN_SPEED = 1;
+
+const float PREDATOR_COLLISION_DELAY = 2.5;
+const int PREDATOR_MOVEMENT_FACTOR = 50;
+
+const int GUNNER_ATTACK_POWER = 12;
+const float GUNNER_ATTACK_SPEED = 2;
+const float GUNNER_BULLET_SPEED = 600;
+
+const int CANNONSHOOTER_ATTACK_POWER = 44;
+const float CANNONSHOOTER_ATTACK_SPEED = 6;
+const float CANNONSHOOTER_BULLET_SPEED = 500;
+
+const int BASIC_PREDATOR_HEALTH = 100;
+const float BASIC_PREDATOR_SPEED = 2.0f;
 
 const int INITIAL_GOLD = 300;
 
@@ -47,23 +64,6 @@ const int GAMEOVER_X = 650;
 const int GAMEOVER_Y = 200;
 const int GAMEOVER_SPACING = 100;
 const int GAMEOVER_X_TITLE = 600;
-
-const int WINDOW_WIDTH = 1920;
-const int WINDOW_HEIGHT = 1080;
-
-const float PREDATOR_COLLISION_DELAY = 2.5;
-const int PREDATOR_MOVEMENT_FACTOR = 50;
-
-const int GUNNER_ATTACK_POWER = 13;
-const float GUNNER_ATTACK_SPEED = 1.5;
-const float GUNNER_BULLET_SPEED = 600;
-
-const int CANNONSHOOTER_ATTACK_POWER = 50;
-const float CANNONSHOOTER_ATTACK_SPEED = 6;
-const float CANNONSHOOTER_BULLET_SPEED = 500;
-
-const int BASIC_PREDATOR_HEALTH = 100;
-const float BASIC_PREDATOR_SPEED = 2.0f;
 
 const int GOLD_TEXT_X = 500;
 const int GOLD_TEXT_Y = 20;
@@ -127,6 +127,7 @@ const std::string IMG_START_BUTTON = "assets/start_button.png";
 const std::string IMG_QUIT_BUTTON = "assets/quit_button.png";
 const std::string IMG_INSTRUCTION_BUTTON = "assets/instructions_button.png";
 const std::string IMG_HIGHSCORE_BUTTON = "assets/highscore_button.png";
+const std::string IMG_CURSOR = "assets/cursor.png";
 
 void loadTexture (sf::Texture &texture, const std::string &filePath);
 void loadFont (sf::Font &font, const std::string &filePath);

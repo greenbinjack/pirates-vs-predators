@@ -1,3 +1,4 @@
+#include "Constants.hpp"
 #include "Game.hpp"
 #include <iostream>
 
@@ -18,7 +19,6 @@ Game::run ()
 
     while (window.isOpen ())
         {
-
             float deltaTime = clock.restart ().asSeconds ();
             window.clear ();
 
