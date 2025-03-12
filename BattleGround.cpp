@@ -185,6 +185,10 @@ BattleGround::handleInput (sf::RenderWindow &window)
                                                     delete newPirate;
                                                 }
                                         }
+                                    else
+                                        {
+                                            delete newPirate;
+                                        }
                                     selectedPirate = NONE;
                                 }
                             else
@@ -220,24 +224,29 @@ BattleGround::update (float deltaTime)
 {
     if (isPaused)
         return;
+
     spawner.update (deltaTime, grid);
 
-    // pirate-predator collision
+    // Check for predator-pirate collision
     for (Predator *enemy : spawner.getEnemies ())
         {
+            if (!enemy)
+                continue; // Prevent NULL pointer dereferencing
+
             int col = (enemy->getPosition ().x - CELL_SIZE * GRID_OFFSET_COLS) / CELL_SIZE;
             int row = (enemy->getPosition ().y - CELL_SIZE * GRID_OFFSET_ROWS) / CELL_SIZE;
 
             if (col >= 0 && col < GRID_COLS && row >= 0 && row < GRID_ROWS)
                 {
-                    if (col + 1 >= GRID_COLS)
-                        continue;
-                    Pirate *pirate = dynamic_cast<Pirate *> (grid.getEntity (col + 1, row));
-                    if (pirate)
-                        {
-                            std::cout << "[DEBUG] Predator collided with pirate at (" << col + 1 << ", " << row << ")\n";
-                            grid.removeEntity (col + 1, row);
-                            enemy->pauseMovement ();
+                    if (col + 1 < GRID_COLS)
+                        { // Ensure valid index
+                            Pirate *pirate = dynamic_cast<Pirate *> (grid.getEntity (col + 1, row));
+                            if (pirate)
+                                {
+                                    std::cout << "[DEBUG] Predator collided with pirate at (" << col + 1 << ", " << row << ")\n";
+                                    grid.removeEntity (col + 1, row);
+                                    enemy->pauseMovement (); // Pause movement for 1 second
+                                }
                         }
                 }
 
@@ -249,13 +258,13 @@ BattleGround::update (float deltaTime)
                 }
         }
 
-    // Pirate Attack
+    // Pirate Attacks
     for (int y = 0; y < GRID_ROWS; ++y)
         {
             for (int x = 0; x < GRID_COLS; ++x)
                 {
                     Pirate *pirate = dynamic_cast<Pirate *> (grid.getEntity (x, y));
-                    if (pirate and grid.get_number_of_enemies_in_row (y) > 0)
+                    if (pirate && grid.get_number_of_enemies_in_row (y) > 0)
                         {
                             Bullet *newBullet = pirate->fireBullet (deltaTime);
                             if (newBullet)
@@ -267,31 +276,29 @@ BattleGround::update (float deltaTime)
                 }
         }
 
-    // bullets-predator Collision
+    // Bullet-Predator Collision
     for (auto it = bullets.begin (); it != bullets.end ();)
         {
             Bullet *bullet = *it;
-            bullet->update (deltaTime);
+            if (!bullet)
+                {
+                    it = bullets.erase (it);
+                    continue;
+                }
 
+            bullet->update (deltaTime);
             bool bulletHit = false;
+
             for (Predator *enemy : spawner.getEnemies ())
                 {
-                    if (checkCollision (bullet, enemy))
+                    if (enemy && checkCollision (bullet, enemy))
                         {
                             enemy->takeDamage (bullet->getDamage ());
-                            delete bullet;
                             it = bullets.erase (it);
+                            delete bullet; // Safe deletion after erasure
                             bulletHit = true;
                             break;
                         }
-                }
-
-            auto pos = bullet->getPosition ();
-            if (pos.x > WINDOW_WIDTH)
-                {
-                    delete bullet;
-                    it = bullets.erase (it);
-                    bulletHit = true;
                 }
 
             if (!bulletHit)
@@ -304,6 +311,12 @@ BattleGround::update (float deltaTime)
     for (auto it = spawner.getEnemies ().begin (); it != spawner.getEnemies ().end ();)
         {
             Predator *enemy = *it;
+            if (!enemy)
+                {
+                    it = spawner.getEnemies ().erase (it);
+                    continue;
+                }
+
             if (enemy->isDefeated ())
                 {
                     int row = enemy->getRow ();
