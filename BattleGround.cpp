@@ -176,7 +176,7 @@ BattleGround::handleInput (sf::RenderWindow &window)
                                             if (placed)
                                                 {
                                                     std::cout << "[DEBUG] Pirate Placed at (" << col << ", " << row << ")" << std::endl;
-                                                    currency.spendGold (newPirate->getCost ());
+                                                    currency.spendGold (newPirate->getPrice ());
                                                     updateGoldText ();
                                                 }
                                             else

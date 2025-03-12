@@ -2,13 +2,14 @@
 #define HIGHSCORE_HPP
 
 #include <SFML/Graphics.hpp>
-#include <vector>
 #include <string>
+#include <vector>
 
 class Game;
 
-class HighScore {
-private:
+class HighScore
+{
+  private:
     sf::Texture backgroundTexture;
     sf::Sprite background;
 
@@ -18,16 +19,17 @@ private:
     sf::Font font;
     sf::Text highScoreText;
 
-    std::vector< std::pair <int, std::string> > scores;
-    
-    void loadScores();
-    void saveScores();
-    void updateHighScoreText();
-public:
-    HighScore();
-    void display(sf::RenderWindow &window);
-    void handleInput(sf::RenderWindow &window, Game &game);
-    void addNewScore(int score, const std::string &name);
+    std::vector<std::pair<int, std::string> > scores;
+
+    void loadScores ();
+    void saveScores ();
+    void updateHighScoreText ();
+
+  public:
+    HighScore ();
+    void display (sf::RenderWindow &window);
+    void handleInput (sf::RenderWindow &window, Game &game);
+    void addNewScore (int score, const std::string &name);
 };
 
-#endif 
+#endif

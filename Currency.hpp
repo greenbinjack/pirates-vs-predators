@@ -1,14 +1,16 @@
 #ifndef CURRENCY_HPP
 #define CURRENCY_HPP
 
-class Currency {
-private:
+class Currency
+{
+  private:
     int gold;
-public:
-    Currency();
+
+  public:
+    Currency ();
     void resetGold ();
-    void addGold(int amount);
-    bool spendGold(int amount);
-    int getGold() const;
+    void addGold (int amount);
+    bool spendGold (int amount);
+    int getGold () const;
 };
 #endif

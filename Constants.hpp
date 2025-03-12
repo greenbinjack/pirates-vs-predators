@@ -7,6 +7,8 @@
 const int CELL_SIZE = 120;
 const int dCELL_SIZE = 120;
 
+const int BULLET_MOVEMENT_FACTOR = 6;
+
 const float INTITIAL_SPAWN_RATE = 12.0;
 const float MAX_SPAWN_RATE = 2.0;
 const float DECREAMENT_RATE = 0.2;
@@ -25,7 +27,7 @@ const int INITIAL_GOLD = 300;
 
 const float MENU_buttonWidth = 400.0;
 const float MENU_buttonHeight = 150.0;
-const float MENU_spacing = 50.0;  
+const float MENU_spacing = 50.0;
 const float topLeftX = 950;
 const float topLeftY = 550;
 
@@ -119,9 +121,14 @@ const std::string IMG_PREDATOR_ALIENMAN = "assets/alienman.png";
 const std::string IMG_PREDATOR_SNAKEMAN = "assets/snakeman.png";
 const std::string IMG_TREASURE_CHEST = "assets/treasure_chest.png";
 const std::string IMG_GAME_LOGO = "assets/game_logo.png";
+const std::string IMG_INSTRUCTIONS_SCREEN = "assets/instructions_screen.png";
+const std::string IMG_MENUSCREEN = "assets/menuscreen.png";
+const std::string IMG_START_BUTTON = "assets/start_button.png";
+const std::string IMG_QUIT_BUTTON = "assets/quit_button.png";
+const std::string IMG_INSTRUCTION_BUTTON = "assets/instructions_button.png";
+const std::string IMG_HIGHSCORE_BUTTON = "assets/highscore_button.png";
 
-
-void loadTexture(sf::Texture& texture, const std::string &filePath);
-void loadFont(sf::Font& font, const std::string &filePath);
+void loadTexture (sf::Texture &texture, const std::string &filePath);
+void loadFont (sf::Font &font, const std::string &filePath);
 
 #endif // CONSTANTS_HPP

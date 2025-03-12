@@ -1,24 +1,33 @@
-#include "Currency.hpp"
 #include "Constants.hpp"
+#include "Currency.hpp"
 
-Currency::Currency() : gold(INITIAL_GOLD) {}
+Currency::Currency () : gold (INITIAL_GOLD) {}
 
-void Currency::addGold(int amount) {
+void
+Currency::addGold (int amount)
+{
     gold += amount;
 }
 
-bool Currency::spendGold(int amount) {
-    if (gold >= amount) {
-        gold -= amount;
-        return true;
-    }
+bool
+Currency::spendGold (int amount)
+{
+    if (gold >= amount)
+        {
+            gold -= amount;
+            return true;
+        }
     return false;
 }
 
-int Currency::getGold() const {
+int
+Currency::getGold () const
+{
     return gold;
 }
 
-void Currency::resetGold () {
+void
+Currency::resetGold ()
+{
     gold = INITIAL_GOLD;
 }

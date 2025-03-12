@@ -5,15 +5,17 @@
 
 class Game;
 
-class MenuScreen {
-private:
+class MenuScreen
+{
+  private:
     sf::Texture backgroundTexture;
     sf::Sprite background;
-    sf::Texture startButtonTexture, instructionsButtonTexture, returnToMenuButtonTexture, highscoreButtonTexture;
+    sf::Texture startButtonTexture, instructionsButtonTexture, quitButtonTexture, highscoreButtonTexture;
     sf::Sprite startButton, instructionsButton, quitButton, highscoreButton;
-public:
-    MenuScreen();
-    void display(sf::RenderWindow &window);
-    void handleInput(sf::RenderWindow &window, Game &game);
+
+  public:
+    MenuScreen ();
+    void display (sf::RenderWindow &window);
+    void handleInput (sf::RenderWindow &window, Game &game);
 };
 #endif
