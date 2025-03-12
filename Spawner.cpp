@@ -38,11 +38,11 @@ void Spawner::spawnEnemy(Grid &grid) {
     std::cout << whichPredator << '\n';
     Predator* newPredator;
     if (whichPredator == RHINOMAN) {
-        newPredator = new Predator(IMG_PREDATOR_RHINOMAN, SPAWN_START_POSITION, spawnRow * CELL_SIZE + dCELL_SIZE, PREDATOR_HEALTH, PREDATOR_SPEED, spawnRow);
+        newPredator = new Predator(IMG_PREDATOR_RHINOMAN, SPAWN_START_POSITION, spawnRow * CELL_SIZE + dCELL_SIZE, PREDATOR_RHINOMAN_HEALTH, PREDATOR_RHINOMAN_SPEED, spawnRow);
     } else if (whichPredator == SNAKEMAN) {
-        newPredator = new Predator(IMG_PREDATOR_ALIENMAN, SPAWN_START_POSITION, spawnRow * CELL_SIZE + dCELL_SIZE, PREDATOR_HEALTH, PREDATOR_SPEED, spawnRow);
+        newPredator = new Predator(IMG_PREDATOR_SNAKEMAN, SPAWN_START_POSITION, spawnRow * CELL_SIZE + dCELL_SIZE, PREDATOR_SNAKEMAN_HEALTH, PREDATOR_SNAKEMAN_SPEED, spawnRow);
     } else {
-        newPredator = new Predator(IMG_PREDATOR_SNAKEMAN, SPAWN_START_POSITION, spawnRow * CELL_SIZE + dCELL_SIZE, PREDATOR_HEALTH, PREDATOR_SPEED, spawnRow);
+        newPredator = new Predator(IMG_PREDATOR_ALIENMAN, SPAWN_START_POSITION, spawnRow * CELL_SIZE + dCELL_SIZE, PREDATOR_ALIENMAN_HEALTH, PREDATOR_ALIENMAN_SPEED, spawnRow);
     }
     enemies.push_back(newPredator);
     grid.update_enemy_in_row (spawnRow, +1);

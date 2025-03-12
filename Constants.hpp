@@ -13,10 +13,16 @@ const float MAX_SPAWN_RATE = 2.0;
 const float DECREAMENT_RATE = 0.2;
 const int SPAWN_START_POSITION = 1920;
 
-const int PREDATOR_HEALTH = 100;
-const float PREDATOR_SPEED = 1.0;
+const int PREDATOR_RHINOMAN_HEALTH = 300;
+const float PREDATOR_RHINOMAN_SPEED = 0.33;
 
-const int INITIAL_GOLD = 200;
+const int PREDATOR_SNAKEMAN_HEALTH = 50;
+const float PREDATOR_SNAKEMAN_SPEED = 2;
+
+const int PREDATOR_ALIENMAN_HEALTH = 100;
+const float PREDATOR_ALIENMAN_SPEED = 1;
+
+const int INITIAL_GOLD = 300;
 
 const float MENU_buttonWidth = 400.0;
 const float MENU_buttonHeight = 150.0;
@@ -45,15 +51,15 @@ const int WINDOW_WIDTH = 1920;
 const int WINDOW_HEIGHT = 1080;
 
 const float PREDATOR_COLLISION_DELAY = 2.5;
-const int PREDATOR_WAITING_TIME = 3;
+//const int PREDATOR_WAITING_TIME = 3;
 const int PREDATOR_MOVEMENT_FACTOR = 50;
 
-const int GUNNER_ATTACK_POWER = 10;
+const int GUNNER_ATTACK_POWER = 13;
 const float GUNNER_ATTACK_SPEED = 1.5;
 const float GUNNER_BULLET_SPEED = 600;
 
-const int CANNONSHOOTER_ATTACK_POWER = 10;
-const float CANNONSHOOTER_ATTACK_SPEED = 2.0;
+const int CANNONSHOOTER_ATTACK_POWER = 50;
+const float CANNONSHOOTER_ATTACK_SPEED = 6;
 const float CANNONSHOOTER_BULLET_SPEED = 500;
 
 const int BASIC_PREDATOR_HEALTH = 100;
@@ -87,7 +93,7 @@ const int GRID_COLS = 13;
 const int GUNNER_PRICE = 50;
 const int CANNONSHOOTER_PRICE = 100;
 
-const int GOLD_REWARD_AMOUNT = 20;
+const int GOLD_REWARD_AMOUNT = 50;
 const int SCORE_REWARD_AMOUNT = 100;
 
 const std::string IMG_HIGHSCORE_SCREEN = "assets/highscore_screen.png";
