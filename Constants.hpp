@@ -3,11 +3,10 @@
 
 #include <SFML/Graphics.hpp>
 #include <iostream>
-// 
+
 const int CELL_SIZE = 120;
 const int dCELL_SIZE = 120;
 
-// spawner
 const float INTITIAL_SPAWN_RATE = 12.0;
 const float MAX_SPAWN_RATE = 2.0;
 const float DECREAMENT_RATE = 0.2;
@@ -51,7 +50,6 @@ const int WINDOW_WIDTH = 1920;
 const int WINDOW_HEIGHT = 1080;
 
 const float PREDATOR_COLLISION_DELAY = 2.5;
-//const int PREDATOR_WAITING_TIME = 3;
 const int PREDATOR_MOVEMENT_FACTOR = 50;
 
 const int GUNNER_ATTACK_POWER = 13;
@@ -65,17 +63,18 @@ const float CANNONSHOOTER_BULLET_SPEED = 500;
 const int BASIC_PREDATOR_HEALTH = 100;
 const float BASIC_PREDATOR_SPEED = 2.0f;
 
-const int GOLD_TEXT_X = 600;
+const int GOLD_TEXT_X = 500;
 const int GOLD_TEXT_Y = 20;
+const int GOLD_TEXT_SPACING = 100;
 
-const int SCORE_TEXT_X = 1000;
+const int SCORE_TEXT_X = 1100;
 const int SCORE_TEXT_Y = 20;
 
-const int GUNNER_CARD_X = 100;
-const int GUNNER_CARD_Y = 200;
+const int GUNNER_CARD_X = 90;
+const int GUNNER_CARD_Y = 300;
 
-const int CANNON_CARD_X = 100;
-const int CANNON_CARD_Y = 400;
+const int CANNON_CARD_X = 90;
+const int CANNON_CARD_Y = 600;
 
 const int PAUSE_BTN_X = WINDOW_WIDTH - CELL_SIZE;
 const int PAUSE_BTN_Y = 0;
@@ -96,6 +95,9 @@ const int CANNONSHOOTER_PRICE = 100;
 const int GOLD_REWARD_AMOUNT = 50;
 const int SCORE_REWARD_AMOUNT = 100;
 
+const int GAME_LOGO_X = 60;
+const int GAME_LOGO_Y = 30;
+
 const std::string IMG_HIGHSCORE_SCREEN = "assets/highscore_screen.png";
 const std::string IMG_BACK_BUTTON = "assets/back_button.png";
 const std::string IMG_BULLET = "assets/bullet.png";
@@ -115,6 +117,9 @@ const std::string IMG_EMPTY_WOOD2 = "assets/empty_wood_other.png";
 const std::string IMG_PREDATOR_RHINOMAN = "assets/rhinoman.png";
 const std::string IMG_PREDATOR_ALIENMAN = "assets/alienman.png";
 const std::string IMG_PREDATOR_SNAKEMAN = "assets/snakeman.png";
+const std::string IMG_TREASURE_CHEST = "assets/treasure_chest.png";
+const std::string IMG_GAME_LOGO = "assets/game_logo.png";
+
 
 void loadTexture(sf::Texture& texture, const std::string &filePath);
 void loadFont(sf::Font& font, const std::string &filePath);

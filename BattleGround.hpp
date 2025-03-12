@@ -2,6 +2,7 @@
 #define BATTLEGROUND_HPP
 
 #include <SFML/Graphics.hpp>
+#include <SFML/System/Clock.hpp>
 #include "Game.hpp"
 #include "Grid.hpp"
 #include "Spawner.hpp"
@@ -37,10 +38,18 @@ private:
     sf::Texture emptyWoodTexture, emptyWoodOtherTexture;
     sf::Sprite emptyWood, emptyWoodOther;
 
-    sf::Text scoreText;  
+    sf::Texture treasureChestTexture;
+    sf::Sprite treasureChest;
+
+    sf::Text scoreText; 
+    
+    sf::Texture gameLogoTexture;
+    sf::Sprite gameLogo;
 
     enum SelectedPirate { NONE, GUNNER, CANNON_SHOOTER };
     SelectedPirate selectedPirate;
+
+    int currentFrame = 0;
 public:
     BattleGround(Game* game);
     void update(float deltaTime);
