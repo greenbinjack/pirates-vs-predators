@@ -10,6 +10,7 @@ private:
     sf::Clock collisionTimer;  /// Timer for movement delay
     bool isPaused;  /// due to collision
     int row;
+    sf::Texture predatorTexture;
 public:
     Predator(const std::string &textureFile, float x, float y, int health, float speed, int gridRow);
     void update(float deltaTime) override;

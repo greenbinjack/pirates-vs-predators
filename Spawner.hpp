@@ -8,11 +8,12 @@
 #include <vector>
 
 class Spawner {
+public:
+    enum TYPES_OF_PREDATOR { RHINOMAN, ALIENMAN, SNAKEMAN };
 private:
     std::vector<Predator*> enemies;
     float spawnRate;
     sf::Clock spawnClock;
-    sf::Texture predatorTexture;
 public:
     Spawner();
     ~Spawner();

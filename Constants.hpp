@@ -92,7 +92,6 @@ const int SCORE_REWARD_AMOUNT = 100;
 
 const std::string IMG_HIGHSCORE_SCREEN = "assets/highscore_screen.png";
 const std::string IMG_BACK_BUTTON = "assets/back_button.png";
-const std::string IMG_PREDATOR = "assets/predator.png";
 const std::string IMG_BULLET = "assets/bullet.png";
 const std::string IMG_CANNONBALL = "assets/cannonball.png";
 const std::string IMG_BATTLEGROUND_GRID = "assets/battleground_background.png";
@@ -107,6 +106,9 @@ const std::string IMG_GUNNER_SPRITE = "assets/gunner.png";
 const std::string IMG_CANNONSHOOTER_SPRITE = "assets/cannonshooter.png";
 const std::string IMG_EMPTY_WOOD1 = "assets/empty_wood.png";
 const std::string IMG_EMPTY_WOOD2 = "assets/empty_wood_other.png";
+const std::string IMG_PREDATOR_RHINOMAN = "assets/rhinoman.png";
+const std::string IMG_PREDATOR_ALIENMAN = "assets/alienman.png";
+const std::string IMG_PREDATOR_SNAKEMAN = "assets/snakeman.png";
 
 void loadTexture(sf::Texture& texture, const std::string &filePath);
 void loadFont(sf::Font& font, const std::string &filePath);

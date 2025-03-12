@@ -2,8 +2,7 @@
 #include "Gunner.hpp"
 #include "Constants.hpp"
 #include <iostream>
-#include <chrono>
-#include <thread>
+
 
 BattleGround::BattleGround(Game* game) : game(game), grid(GRID_ROWS, GRID_COLS), currency() {
     loadTexture (backgroundTexture, IMG_BATTLEGROUND_GRID);
@@ -183,7 +182,6 @@ void BattleGround::update(float deltaTime) {
             Pirate* pirate = dynamic_cast<Pirate*>(grid.getEntity(col + 1, row));
             if (pirate) {
                 std::cout << "[DEBUG] Predator collided with pirate at (" << col + 1<< ", " << row << ")\n";
-                // std::this_thread::sleep_for(std::chrono::seconds(PREDATOR_WAITING_TIME));
                 grid.removeEntity(col + 1, row); 
                 enemy->pauseMovement();  
             }

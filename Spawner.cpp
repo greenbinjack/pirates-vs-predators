@@ -6,7 +6,6 @@
 #include <ctime>
 
 Spawner::Spawner() : spawnRate(INTITIAL_SPAWN_RATE) {  
-    loadTexture (predatorTexture, IMG_PREDATOR);
     std::srand(std::time(nullptr));
 }
 
@@ -35,7 +34,16 @@ void Spawner::update(float deltaTime, Grid &grid) {
 
 void Spawner::spawnEnemy(Grid &grid) {
     int spawnRow = rand() % 7;
-    Predator* newPredator = new Predator(IMG_PREDATOR, SPAWN_START_POSITION, spawnRow * CELL_SIZE + dCELL_SIZE, PREDATOR_HEALTH, PREDATOR_SPEED, spawnRow);
+    int whichPredator = rand () % 3;
+    std::cout << whichPredator << '\n';
+    Predator* newPredator;
+    if (whichPredator == RHINOMAN) {
+        newPredator = new Predator(IMG_PREDATOR_RHINOMAN, SPAWN_START_POSITION, spawnRow * CELL_SIZE + dCELL_SIZE, PREDATOR_HEALTH, PREDATOR_SPEED, spawnRow);
+    } else if (whichPredator == SNAKEMAN) {
+        newPredator = new Predator(IMG_PREDATOR_ALIENMAN, SPAWN_START_POSITION, spawnRow * CELL_SIZE + dCELL_SIZE, PREDATOR_HEALTH, PREDATOR_SPEED, spawnRow);
+    } else {
+        newPredator = new Predator(IMG_PREDATOR_SNAKEMAN, SPAWN_START_POSITION, spawnRow * CELL_SIZE + dCELL_SIZE, PREDATOR_HEALTH, PREDATOR_SPEED, spawnRow);
+    }
     enemies.push_back(newPredator);
     grid.update_enemy_in_row (spawnRow, +1);
 }
