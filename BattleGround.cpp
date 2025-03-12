@@ -231,7 +231,7 @@ BattleGround::update (float deltaTime)
     for (Predator *enemy : spawner.getEnemies ())
         {
             if (!enemy)
-                continue; // Prevent NULL pointer dereferencing
+                continue; 
 
             int col = (enemy->getPosition ().x - CELL_SIZE * GRID_OFFSET_COLS) / CELL_SIZE;
             int row = (enemy->getPosition ().y - CELL_SIZE * GRID_OFFSET_ROWS) / CELL_SIZE;
@@ -239,13 +239,13 @@ BattleGround::update (float deltaTime)
             if (col >= 0 && col < GRID_COLS && row >= 0 && row < GRID_ROWS)
                 {
                     if (col + 1 < GRID_COLS)
-                        { // Ensure valid index
+                        { 
                             Pirate *pirate = dynamic_cast<Pirate *> (grid.getEntity (col + 1, row));
                             if (pirate)
                                 {
                                     std::cout << "[DEBUG] Predator collided with pirate at (" << col + 1 << ", " << row << ")\n";
                                     grid.removeEntity (col + 1, row);
-                                    enemy->pauseMovement (); // Pause movement for 1 second
+                                    enemy->pauseMovement (); 
                                 }
                         }
                 }
@@ -295,7 +295,7 @@ BattleGround::update (float deltaTime)
                         {
                             enemy->takeDamage (bullet->getDamage ());
                             it = bullets.erase (it);
-                            delete bullet; // Safe deletion after erasure
+                            delete bullet; 
                             bulletHit = true;
                             break;
                         }
