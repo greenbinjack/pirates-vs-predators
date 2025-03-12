@@ -1,5 +1,5 @@
-#include "Constants.hpp"
 #include "Predator.hpp"
+#include "Constants.hpp"
 #include <iostream>
 
 Predator::Predator (const std::string &textureFile, float x, float y, int health, float speed, int gridRow) : Entity (textureFile, x, y), health (health), speed (speed), row (gridRow), isPaused (false) {}

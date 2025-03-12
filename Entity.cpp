@@ -6,6 +6,7 @@
 Entity::Entity (const std::string &textureFile, float x, float y) : position (x, y)
 {
     loadTexture (texture, textureFile);
+    sprite.setTexture (texture);
 }
 
 sf::Sprite &
