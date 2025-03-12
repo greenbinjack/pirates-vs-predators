@@ -173,6 +173,7 @@ void BattleGround::update(float deltaTime) {
     if (isPaused) return; 
     spawner.update(deltaTime, grid);
 
+    // pirate-predator collision
     for (Predator* enemy : spawner.getEnemies()) {
         int col = (enemy->getPosition().x - CELL_SIZE * GRID_OFFSET_COLS) / CELL_SIZE;  
         int row = (enemy->getPosition().y - CELL_SIZE * GRID_OFFSET_ROWS) / CELL_SIZE;  
@@ -194,7 +195,7 @@ void BattleGround::update(float deltaTime) {
         }
     }
     
-    // Handle Pirate Attacks
+    // Pirate Attack
     for (int y = 0; y < GRID_ROWS; ++y) {
         for (int x = 0; x < GRID_COLS; ++x) {
             Pirate* pirate = dynamic_cast<Pirate*>(grid.getEntity(x, y));
@@ -208,7 +209,7 @@ void BattleGround::update(float deltaTime) {
         }
     }
 
-    // Move Bullets & Check for Collision
+    // bullets-predator Collision
     for (auto it = bullets.begin(); it != bullets.end();) {
         Bullet* bullet = *it;
         bullet->update(deltaTime);
