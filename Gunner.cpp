@@ -12,3 +12,7 @@ Bullet* Gunner::fireBullet(float deltaTime) {
     }
     return nullptr;
 }
+
+int Gunner:: getCost () {
+    return GUNNER_PRICE;
+}

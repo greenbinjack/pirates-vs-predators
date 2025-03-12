@@ -7,6 +7,7 @@ class CannonShooter : public Pirate {
 public:
     CannonShooter(const std::string &textureFile, float x, float y);
     Bullet* fireBullet(float deltaTime) override;
+    int getCost ();
 };
 
 #endif

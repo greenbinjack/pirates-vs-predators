@@ -19,7 +19,7 @@ HighScore::HighScore() {
 
     loadFont (font, "assets/custom_font.ttf");
     highScoreText.setFont(font);
-    highScoreText.setCharacterSize(HIGHSCORE_FONT);
+    highScoreText.setCharacterSize(FONT_MEDIUM);
     highScoreText.setFillColor(sf::Color::Black);
     highScoreText.setPosition(HIGHSCORE_TEXT_X, HIGHSCORE_TEXT_Y);
 }

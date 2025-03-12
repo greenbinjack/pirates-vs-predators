@@ -12,3 +12,7 @@ Bullet* CannonShooter::fireBullet(float deltaTime) {
     }
     return nullptr;
 }
+
+int CannonShooter:: getCost () {
+    return CANNONSHOOTER_PRICE;
+}

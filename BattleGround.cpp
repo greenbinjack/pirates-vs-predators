@@ -2,6 +2,8 @@
 #include "Gunner.hpp"
 #include "Constants.hpp"
 #include <iostream>
+#include <chrono>
+#include <thread>
 
 BattleGround::BattleGround(Game* game) : game(game), grid(GRID_ROWS, GRID_COLS), currency() {
     loadTexture (backgroundTexture, IMG_BATTLEGROUND_GRID);
@@ -9,14 +11,20 @@ BattleGround::BattleGround(Game* game) : game(game), grid(GRID_ROWS, GRID_COLS),
 
     loadFont (font, FONT_TTF_FILE);
 
+    loadTexture (emptyWoodTexture, IMG_EMPTY_WOOD1);
+    emptyWood.setTexture (emptyWoodTexture);
+    emptyWood.setPosition (GOLD_TEXT_X - MENU_spacing, GOLD_TEXT_Y - 10);
     goldText.setFont(font);
-    goldText.setCharacterSize(FONT_SMALL);  
+    goldText.setCharacterSize(FONT_MEDIUM);  
     goldText.setFillColor(sf::Color::Yellow);
     goldText.setPosition(GOLD_TEXT_X, GOLD_TEXT_Y);
     updateGoldText();
-
+    
+    loadTexture (emptyWoodOtherTexture, IMG_EMPTY_WOOD2);
+    emptyWoodOther.setTexture (emptyWoodOtherTexture);
+    emptyWoodOther.setPosition (SCORE_TEXT_X - MENU_spacing, SCORE_TEXT_Y - 10)  ;
     scoreText.setFont(font);
-    scoreText.setCharacterSize(FONT_SMALL);
+    scoreText.setCharacterSize(FONT_MEDIUM);
     scoreText.setFillColor(sf::Color::White);
     scoreText.setPosition(SCORE_TEXT_X, SCORE_TEXT_Y);
     updateScoreText();
@@ -62,6 +70,8 @@ void BattleGround::render(sf::RenderWindow &window) {
         break;
     case false:
         window.draw(background);
+        window.draw (emptyWood);
+        window.draw (emptyWoodOther);
         window.draw(goldText);
         window.draw (scoreText);
         window.draw(gunnerCard);
@@ -76,34 +86,110 @@ void BattleGround::render(sf::RenderWindow &window) {
     }
 }
 
-void BattleGround::update(float deltaTime) {
-    if (isPaused) return; 
-    spawner.update(deltaTime);
+void BattleGround::updateGoldText() {
+    goldText.setString("Gold: " + std::to_string(currency.getGold()));
+}
 
-    for (Predator* enemy : spawner.getEnemies()) {
-        if (enemy->getPosition().x <= 360) {
-            std::cout << "[DEBUG] Predator reached base! GAME OVER!\n";
-            game->changeState(Game::GAME_OVER);
-            return;  
+void BattleGround::updateScoreText() {
+    scoreText.setString("Score: " + std::to_string(game->getScore()));
+}
+
+bool BattleGround::checkCollision(Entity* a, Entity* b) {
+    return a->getBounds().intersects(b->getBounds());
+}
+
+void BattleGround::handleInput(sf::RenderWindow &window) {
+    sf::Event event;
+    while (window.pollEvent(event)) {
+        if (event.type == sf::Event::Closed) {
+            window.close();
+        }
+        
+        if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left) {
+            sf::Vector2i pixelPos = sf::Mouse::getPosition(window);
+            sf::Vector2f worldPos = window.mapPixelToCoords(pixelPos);
+            
+            if (!isPaused) {
+                if (pauseButton.getGlobalBounds().contains(worldPos)) {
+                    isPaused = true;
+                    std::cout << "[DEBUG] Game Paused!" << std::endl;
+                    return;
+                }
+                if (gunnerCard.getGlobalBounds().contains(worldPos)) {
+                    selectedPirate = GUNNER;
+                    std::cout << "[DEBUG] Gunner Selected!" << std::endl;
+                    return;
+                } else if (cannonShooterCard.getGlobalBounds().contains(worldPos)) {
+                    selectedPirate = CANNON_SHOOTER;
+                    std::cout << "[DEBUG] Cannon Shooter Selected!" << std::endl;
+                    return;
+                }
+
+                int col = (worldPos.x - CELL_SIZE * GRID_OFFSET_COLS) / CELL_SIZE;
+                int row = (worldPos.y - CELL_SIZE * GRID_OFFSET_ROWS) / CELL_SIZE;
+                
+                if (col >= 0 && col < GRID_COLS - GRID_OFFSET_COLS && row >= 0 && row < GRID_ROWS && selectedPirate != NONE) {
+                    Pirate* newPirate = nullptr;
+                    if (currency.getGold() >= GUNNER_PRICE and selectedPirate == GUNNER) {
+                        newPirate = new Gunner(IMG_GUNNER_SPRITE, col * CELL_SIZE + GRID_OFFSET_COLS * CELL_SIZE, row * CELL_SIZE + GRID_OFFSET_ROWS * CELL_SIZE);
+                    } else if (currency.getGold() >= CANNONSHOOTER_PRICE and selectedPirate == CANNON_SHOOTER) {
+                        newPirate = new CannonShooter(IMG_CANNONSHOOTER_SPRITE, col * CELL_SIZE + GRID_OFFSET_COLS * CELL_SIZE, row * CELL_SIZE + GRID_OFFSET_ROWS * CELL_SIZE);
+                    }
+                        
+                    if (newPirate) {
+                        bool placed = grid.placePirate(col, row, newPirate);
+                        if (placed) {
+                            std::cout << "[DEBUG] Pirate Placed at (" << col << ", " << row << ")" << std::endl;
+                            currency.spendGold(newPirate->getCost ());
+                            updateGoldText();
+                        } else {
+                            std::cout << "[DEBUG] Cell Occupied! Could Not Place Pirate." << std::endl;
+                            delete newPirate;
+                        }
+                    }
+                    selectedPirate = NONE;  
+                } else {
+                    std::cout << "[DEBUG] Not Enough Gold!" << std::endl;
+                }
+            } else {
+                if (resumeButton.getGlobalBounds().contains(worldPos)) {
+                    isPaused = false;
+                    std::cout << "[DEBUG] Game Resumed!" << std::endl;
+                } 
+                else if (restartButton.getGlobalBounds().contains(worldPos)) {
+                    std::cout << "[DEBUG] Restarting Game!" << std::endl;
+                    game->restartGame(false);  
+                } 
+                else if (quitButton.getGlobalBounds().contains(worldPos)) {
+                    std::cout << "[DEBUG] Quitting to Menu!" << std::endl;
+                    game->restartGame(true); 
+                    return;
+                }
+            }
         }
     }
-    // std::cout << "[DEBUG] Bullets in game: " << bullets.size() << std::endl;  // Print bullet count
+}
 
-    // ✅ Check for predator-pirate collisions
+void BattleGround::update(float deltaTime) {
+    if (isPaused) return; 
+    spawner.update(deltaTime, grid);
+
     for (Predator* enemy : spawner.getEnemies()) {
-        int col = (enemy->getPosition().x - 360) / CELL_SIZE;  // ✅ Convert x position to grid column
-        int row = (enemy->getPosition().y - 120) / CELL_SIZE;  // ✅ Convert y position to grid row
+        int col = (enemy->getPosition().x - CELL_SIZE * GRID_OFFSET_COLS) / CELL_SIZE;  
+        int row = (enemy->getPosition().y - CELL_SIZE * GRID_OFFSET_ROWS) / CELL_SIZE;  
 
-        if (col >= 0 && col < 10 && row >= 0 && row < 7) {  // ✅ Ensure valid grid position
-            Pirate* pirate = dynamic_cast<Pirate*>(grid.getEntity(col, row));
+        if (col >= 0 && col < GRID_COLS && row >= 0 && row < GRID_ROWS) {  
+            if (col + 1 >= GRID_COLS) continue;
+            Pirate* pirate = dynamic_cast<Pirate*>(grid.getEntity(col + 1, row));
             if (pirate) {
-                std::cout << "[DEBUG] Predator collided with pirate at (" << col << ", " << row << ")\n";
-                grid.removeEntity(col, row);  // ✅ Remove the pirate
-                enemy->pauseMovement();  // ✅ Pause predator for 1 second
+                std::cout << "[DEBUG] Predator collided with pirate at (" << col + 1<< ", " << row << ")\n";
+                // std::this_thread::sleep_for(std::chrono::seconds(PREDATOR_WAITING_TIME));
+                grid.removeEntity(col + 1, row); 
+                enemy->pauseMovement();  
             }
         }
 
-        if (enemy->getPosition().x <= 360) {
+        if (enemy->getPosition().x <= (GRID_OFFSET_COLS - 1) * CELL_SIZE + CELL_SIZE * 2 / 3) {
             std::cout << "[DEBUG] Predator reached base! GAME OVER!\n";
             game->changeState(Game::GAME_OVER);
             return;  
@@ -111,10 +197,10 @@ void BattleGround::update(float deltaTime) {
     }
     
     // Handle Pirate Attacks
-    for (int y = 0; y < 7; ++y) {
-        for (int x = 0; x < 10; ++x) {
+    for (int y = 0; y < GRID_ROWS; ++y) {
+        for (int x = 0; x < GRID_COLS; ++x) {
             Pirate* pirate = dynamic_cast<Pirate*>(grid.getEntity(x, y));
-            if (pirate) {
+            if (pirate and grid.get_number_of_enemies_in_row (y) > 0) {
                 Bullet* newBullet = pirate->fireBullet(deltaTime);
                 if (newBullet) {
                     bullets.push_back(newBullet);
@@ -137,8 +223,16 @@ void BattleGround::update(float deltaTime) {
                 it = bullets.erase(it);
                 bulletHit = true;
                 break;
-            }
+            } 
         }
+        
+        auto pos = bullet->getPosition ();
+        if (pos.x > WINDOW_WIDTH) {
+            delete bullet;
+            it = bullets.erase(it);
+            bulletHit = true;
+        }
+
         if (!bulletHit) {
             ++it;
         }
@@ -148,11 +242,13 @@ void BattleGround::update(float deltaTime) {
     for (auto it = spawner.getEnemies().begin(); it != spawner.getEnemies().end();) {
         Predator* enemy = *it;
         if (enemy->isDefeated()) {
+            int row = enemy->getRow();
+            grid.update_enemy_in_row (row, -1);
             delete enemy;
             it = spawner.getEnemies().erase(it);
-            game->addScore(100);  // ✅ Increase score by 100
+            game->addScore(SCORE_REWARD_AMOUNT);  
             updateScoreText();
-            currency.addGold(10);  // Reward player for killing a predator
+            currency.addGold(GOLD_REWARD_AMOUNT); 
             updateGoldText();
         } else {
             ++it;
@@ -160,124 +256,3 @@ void BattleGround::update(float deltaTime) {
     }
 }
 
-void BattleGround::updateBullets(float deltaTime) {
-    for (auto it = bullets.begin(); it != bullets.end();) {
-        Bullet* bullet = *it;
-        bullet->update(deltaTime);
-        
-        bool bulletHit = false;
-        for (Predator* enemy : spawner.getEnemies()) {
-            if (checkCollision(bullet, enemy)) {
-                enemy->takeDamage(bullet->getDamage());
-                delete bullet;
-                it = bullets.erase(it);
-                bulletHit = true;
-                break;
-            }
-        }
-        
-        if (!bulletHit) {
-            ++it;
-        }
-    }
-}
-
-bool BattleGround::placePirate(int x, int y, Pirate* pirate) {
-    if (currency.spendGold(20)) { // Deduct cost for placing a pirate
-        updateGoldText();
-        return grid.placePirate(x, y, pirate);
-    }
-    return false;
-}
-
-void BattleGround::updateGoldText() {
-    goldText.setString("Gold: " + std::to_string(currency.getGold()));
-}
-
-void BattleGround::handleInput(sf::RenderWindow &window) {
-    sf::Event event;
-    while (window.pollEvent(event)) {
-        if (event.type == sf::Event::Closed) {
-            window.close();
-        }
-
-        if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left) {
-            sf::Vector2i pixelPos = sf::Mouse::getPosition(window);
-            sf::Vector2f worldPos = window.mapPixelToCoords(pixelPos);
-
-            if (!isPaused) {
-                // Check Pause Button Click
-                if (pauseButton.getGlobalBounds().contains(worldPos)) {
-                    isPaused = true;
-                    std::cout << "[DEBUG] Game Paused!" << std::endl;
-                    return;
-                }
-
-                // Check for Pirate Selection
-                if (gunnerCard.getGlobalBounds().contains(worldPos)) {
-                    selectedPirate = GUNNER;
-                    std::cout << "[DEBUG] Gunner Selected!" << std::endl;
-                    return;
-                } else if (cannonShooterCard.getGlobalBounds().contains(worldPos)) {
-                    selectedPirate = CANNON_SHOOTER;
-                    std::cout << "[DEBUG] Cannon Shooter Selected!" << std::endl;
-                    return;
-                }
-
-                // Convert Click to Grid Coordinates
-                int col = (worldPos.x - 360) / CELL_SIZE;
-                int row = (worldPos.y - 120) / CELL_SIZE;
-
-                if (col >= 0 && col < 10 && row >= 0 && row < 7 && selectedPirate != NONE) {
-                    if (currency.getGold() >= 50) {
-                        Pirate* newPirate = nullptr;
-
-                        if (selectedPirate == GUNNER) {
-                            newPirate = new Gunner("assets/gunner.png", col * CELL_SIZE + 360, row * CELL_SIZE + 120);
-                        } else if (selectedPirate == CANNON_SHOOTER) {
-                            newPirate = new CannonShooter("assets/cannonshooter.png", col * CELL_SIZE + 360, row * CELL_SIZE + 120);
-                        }
-
-                        if (newPirate) {
-                            bool placed = grid.placePirate(col, row, newPirate);
-                            if (placed) {
-                                std::cout << "[DEBUG] Pirate Placed at (" << col << ", " << row << ")" << std::endl;
-                                currency.spendGold(50);
-                                updateGoldText();
-                            } else {
-                                std::cout << "[DEBUG] Cell Occupied! Could Not Place Pirate." << std::endl;
-                                delete newPirate;
-                            }
-                        }
-                        selectedPirate = NONE;  // Reset selection
-                    } else {
-                        std::cout << "[DEBUG] Not Enough Gold!" << std::endl;
-                    }
-                }
-            } else {
-                // **Handle Pause Menu Button Clicks**
-                if (resumeButton.getGlobalBounds().contains(worldPos)) {
-                    isPaused = false;
-                    std::cout << "[DEBUG] Game Resumed!" << std::endl;
-                } 
-                else if (restartButton.getGlobalBounds().contains(worldPos)) {
-                    std::cout << "[DEBUG] Restarting Game!" << std::endl;
-                    game->restartGame(0);  // o for BATTLE
-                } 
-                else if (quitButton.getGlobalBounds().contains(worldPos)) {
-                    std::cout << "[DEBUG] Quitting to Menu!" << std::endl;
-                    game->restartGame(1); // 1 for MENU
-                    return;
-                }
-            }
-        }
-    }
-}
-
-void BattleGround::updateScoreText() {
-    scoreText.setString("Score: " + std::to_string(game->getScore()));
-}
-
-bool BattleGround::checkCollision(Entity* a, Entity* b) {
-    return a->getBounds().intersects(b->getBounds());
-}

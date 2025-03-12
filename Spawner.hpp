@@ -2,6 +2,7 @@
 #define SPAWNER_HPP
 
 #include "Predator.hpp"
+#include "Grid.hpp"
 #include <SFML/Graphics.hpp>
 #include <SFML/System/Clock.hpp>
 #include <vector>
@@ -16,9 +17,9 @@ public:
     Spawner();
     ~Spawner();
     
-    void update(float deltaTime);
+    void update(float deltaTime, Grid &grid);
     void render(sf::RenderWindow &window);
-    void spawnEnemy();
+    void spawnEnemy(Grid &grid);
     std::vector<Predator*>& getEnemies();
     void clearEnemies();
 };

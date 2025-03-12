@@ -34,6 +34,9 @@ private:
     sf::RectangleShape pauseBackground;
     bool isPaused; 
 
+    sf::Texture emptyWoodTexture, emptyWoodOtherTexture;
+    sf::Sprite emptyWood, emptyWoodOther;
+
     sf::Text scoreText;  
 
     enum SelectedPirate { NONE, GUNNER, CANNON_SHOOTER };
@@ -45,7 +48,6 @@ public:
     void handleInput(sf::RenderWindow &window); 
     bool placePirate(int x, int y, Pirate* pirate);
     void updateGoldText();
-    void updateBullets(float deltaTime);
     void updateScoreText();
     static bool checkCollision(Entity* a, Entity* b);
 };

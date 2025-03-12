@@ -2,8 +2,8 @@
 #include "Constants.hpp"
 #include <iostream>
 
-Predator::Predator(const std::string &textureFile, float x, float y, int health, float speed)
-    : Entity(textureFile, x, y), health(health), speed(speed), isPaused(false) {}
+Predator::Predator(const std::string &textureFile, float x, float y, int health, float speed, int gridRow)
+    : Entity(textureFile, x, y), health(health), speed(speed), row(gridRow), isPaused(false) {}
 
 void Predator::update(float deltaTime) {
     if (isPaused) {

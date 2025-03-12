@@ -1,5 +1,6 @@
 #include "Spawner.hpp"
 #include "Constants.hpp"
+
 #include <iostream>
 #include <cstdlib>
 #include <ctime>
@@ -15,10 +16,10 @@ Spawner::~Spawner() {
     }
 }
 
-void Spawner::update(float deltaTime) {
+void Spawner::update(float deltaTime, Grid &grid) {
     if (spawnClock.getElapsedTime().asSeconds() >= spawnRate) {
         spawnClock.restart();
-        spawnEnemy();
+        spawnEnemy(grid);
         
         if (spawnRate > MAX_SPAWN_RATE) {
             spawnRate -= DECREAMENT_RATE; 
@@ -32,10 +33,11 @@ void Spawner::update(float deltaTime) {
     }
 }
 
-void Spawner::spawnEnemy() {
+void Spawner::spawnEnemy(Grid &grid) {
     int spawnRow = rand() % 7;
-    Predator* newPredator = new Predator(IMG_PREDATOR, SPAWN_START_POSITION, spawnRow * CELL_SIZE + dCELL_SIZE, PREDATOR_HEALTH, PREDATOR_SPEED);
+    Predator* newPredator = new Predator(IMG_PREDATOR, SPAWN_START_POSITION, spawnRow * CELL_SIZE + dCELL_SIZE, PREDATOR_HEALTH, PREDATOR_SPEED, spawnRow);
     enemies.push_back(newPredator);
+    grid.update_enemy_in_row (spawnRow, +1);
 }
 
 void Spawner::render(sf::RenderWindow &window) {

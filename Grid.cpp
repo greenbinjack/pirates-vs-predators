@@ -4,6 +4,7 @@
 
 Grid::Grid(int rows, int cols) : rows(rows), cols(cols) {
     cells.resize(rows, std::vector<Entity*>(cols, nullptr));
+    current_available_enemies.resize (rows, 0);
 }
 
 bool Grid::placePirate (int x, int y, Pirate* pirate) {
@@ -37,4 +38,12 @@ void Grid::removeEntity(int x, int y) {
         cells[y][x] = nullptr;  
         std::cout << "[DEBUG] Pirate at (" << x << ", " << y << ") removed!\n";
     }
+}
+
+int Grid:: get_number_of_enemies_in_row (int current_row) {
+    return current_available_enemies[current_row];
+}
+
+void Grid:: update_enemy_in_row (int current_row, int amount) {
+    current_available_enemies[current_row] += amount;
 }
