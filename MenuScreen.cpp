@@ -1,15 +1,18 @@
+#include "MenuScreen.hpp"
 #include "Constants.hpp"
 #include "Game.hpp"
-#include "MenuScreen.hpp"
 #include <iostream>
 
 MenuScreen::MenuScreen ()
 {
     loadTexture (backgroundTexture, IMG_MENUSCREEN);
+    background.setTexture (backgroundTexture);
+    
     loadTexture (startButtonTexture, IMG_START_BUTTON);
     loadTexture (instructionsButtonTexture, IMG_INSTRUCTION_BUTTON);
     loadTexture (quitButtonTexture, IMG_QUIT_BUTTON);
     loadTexture (highscoreButtonTexture, IMG_HIGHSCORE_BUTTON);
+
 
     startButton.setTexture (startButtonTexture);
     instructionsButton.setTexture (instructionsButtonTexture);
