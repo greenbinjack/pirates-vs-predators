@@ -47,6 +47,5 @@ class Game
     int getScore ();
     void restartGame (bool isMenu);
     void setPlayerName (const std::string &name);
-    std::string getPlayerName () const;
 };
 #endif
