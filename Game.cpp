@@ -2,9 +2,9 @@
 #include "Game.hpp"
 #include <iostream>
 
-sf::Vector2u Game::baseResolution = sf::Vector2u (1920, 1080);
+sf::Vector2u Game::baseResolution = sf::Vector2u (WINDOW_WIDTH, WINDOW_HEIGHT);
 
-Game::Game () : window (sf::VideoMode (1920, 1080), "Pirates vs Predators"), currentState (MENU), score (0) { battleground = new BattleGround (this); }
+Game::Game () : window (sf::VideoMode (WINDOW_WIDTH, WINDOW_HEIGHT), "Pirates vs Predators"), currentState (MENU), score (0) { battleground = new BattleGround (this); }
 
 sf::RenderWindow &
 Game::getWindow ()
@@ -79,6 +79,7 @@ Game::restartGame (bool isMenu)
         }
     else
         {
+            score = 0;
             changeState (BATTLE);
         }
 }
@@ -108,4 +109,10 @@ void
 Game::setPlayerName (const std::string &name)
 {
     playerName = name;
+}
+
+void
+Game::resetScore () 
+{
+    score = 0;
 }

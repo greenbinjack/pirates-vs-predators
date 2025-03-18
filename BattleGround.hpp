@@ -55,14 +55,11 @@ class BattleGround
     };
     SelectedPirate selectedPirate;
 
-    int currentFrame = 0;
-
   public:
     BattleGround (Game *game);
     void update (float deltaTime);
     void render (sf::RenderWindow &window);
     void handleInput (sf::RenderWindow &window);
-    bool placePirate (int x, int y, Pirate *pirate);
     void updateGoldText ();
     void updateScoreText ();
     static bool checkCollision (Entity *a, Entity *b);

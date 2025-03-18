@@ -31,6 +31,7 @@ BattleGround::BattleGround (Game *game) : game (game), grid (GRID_ROWS, GRID_COL
     scoreText.setCharacterSize (FONT_MEDIUM);
     scoreText.setFillColor (sf::Color::White);
     scoreText.setPosition (SCORE_TEXT_X, SCORE_TEXT_Y);
+    game->resetScore ();
     updateScoreText ();
 
     loadTexture (gameLogoTexture, IMG_GAME_LOGO);

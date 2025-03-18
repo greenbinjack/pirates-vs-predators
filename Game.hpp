@@ -45,6 +45,7 @@ class Game
     void addScore (int points);
     void saveScore ();
     int getScore ();
+    void resetScore ();
     void restartGame (bool isMenu);
     void setPlayerName (const std::string &name);
 };
