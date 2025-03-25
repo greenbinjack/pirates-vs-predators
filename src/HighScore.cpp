@@ -18,7 +18,7 @@ HighScore::HighScore ()
     backButton.setTexture (backButtonTexture);
     backButton.setPosition (BACK_BUTTON_X, BACK_BUTTON_Y);
 
-    loadFont (font, "assets/custom_font.ttf");
+    loadFont (font, FONT_TTF_FILE);
     highScoreText.setFont (font);
     highScoreText.setCharacterSize (FONT_MEDIUM);
     highScoreText.setFillColor (sf::Color::Black);
@@ -28,7 +28,7 @@ HighScore::HighScore ()
 void
 HighScore::loadScores ()
 {
-    std::ifstream file ("assets/highscores.txt");
+    std::ifstream file (FILE_HIGHSCORE);
     try
         {
             if (!file)
@@ -59,7 +59,7 @@ HighScore::loadScores ()
 void
 HighScore::saveScores ()
 {
-    std::ofstream file ("assets/highscores.txt");
+    std::ofstream file (FILE_HIGHSCORE);
     for (size_t i = 0; i < std::min (scores.size (), size_t (MAX_NUMBER_OF_SCORES_SHOWN)); i++)
         {
             file << scores[i].first << ' ' << scores[i].second << std::endl;

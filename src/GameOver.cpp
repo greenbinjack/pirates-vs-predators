@@ -5,11 +5,11 @@
 
 GameOver::GameOver ()
 {
-    loadTexture (menuButtonTexture, "assets/quit_button_small.png");
+    loadTexture (menuButtonTexture, IMG_RETURN_TO_MENU_BTN);
     menuButton.setTexture (menuButtonTexture);
     menuButton.setPosition (GAMEOVER_X, GAMEOVER_Y + 4 * GAMEOVER_SPACING);
 
-    loadFont (font, "assets/custom_font.ttf");
+    loadFont (font, FONT_TTF_FILE);
 
     gameOverText.setFont (font);
     gameOverText.setString ("Game Over");
