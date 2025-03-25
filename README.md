@@ -15,7 +15,6 @@
 ## Technology Used
 #### Language: C++
 #### Libraries and Frameworks:
-- **SFML (Simple and Fast Multimedia Library)**: 
   - **SFML Graphics**: For rendering the game world, including pirates, predators, bullets, and the background.
   - **SFML Window**: For managing the game window and handling user input (mouse, keyboard).
   - **SFML System**: For managing time, threads, and other system utilities.
