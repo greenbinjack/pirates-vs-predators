@@ -1,4 +1,4 @@
-## Overview
+## Pirates vs Predators
 **Pirates vs Predators** is a strategy-based tower defense game where players place different types of pirates on a grid to defend their base from a variety of predators. Players need to carefully manage resources (gold) to place pirates and use them to fight off increasingly difficult waves of enemies. The game includes dynamic gameplay elements, such as pirate selection, gold management, enemy AI, and collision detection for bullets and predators.
 
 ## Features
