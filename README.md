@@ -12,7 +12,9 @@
 - **Game Over & Restart**: The game ends when a predator reaches the base. The player can then view their score, restart, or return to the main menu.
 - **Intuitive User Interface**: Easy-to-use UI for navigating between different screens (Menu, Instructions, High Scores, Game Over).
 
-
+## Technology Used
+- **Language**: C++
+- **Libraries and Frameworks**: SFML (Simple and Fast Multimedia Library): Used for handling graphics, window management, and user input.
 
 ## Installation & Setup (Linux)  
 
