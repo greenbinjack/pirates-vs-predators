@@ -13,8 +13,12 @@
 - **Intuitive User Interface**: Easy-to-use UI for navigating between different screens (Menu, Instructions, High Scores, Game Over).
 
 ## Technology Used
-- **Language**: C++
-- **Libraries and Frameworks**: SFML (Simple and Fast Multimedia Library): Used for handling graphics, window management, and user input.
+#### Language: C++
+#### Libraries and Frameworks:
+- **SFML (Simple and Fast Multimedia Library)**: 
+  - **SFML Graphics**: For rendering the game world, including pirates, predators, bullets, and the background.
+  - **SFML Window**: For managing the game window and handling user input (mouse, keyboard).
+  - **SFML System**: For managing time, threads, and other system utilities.
 
 ## Installation & Setup (Linux)  
 
