@@ -26,7 +26,7 @@ sudo apt install libsfml-dev
 
 #### 2. Clone the repository  
 ```sh
-https://github.com/greenbinjack/pirates-vs-predators.git
+git clone https://github.com/greenbinjack/pirates-vs-predators.git
 cd pirate-vs-predators
 ```
 
