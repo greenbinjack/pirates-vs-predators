@@ -14,7 +14,7 @@ sudo apt install libsfml-dev
 
 #### 3. Compile and Run the Game
 ```sh
-g++ main.cpp Game.cpp MenuScreen.cpp Instructions.cpp HighScore.cpp BattleGround.cpp Grid.cpp Spawner.cpp Predator.cpp Pirate.cpp Gunner.cpp CannonShooter.cpp Bullet.cpp Currency.cpp Entity.cpp GameOver.cpp NameEntryScreen.cpp Constants.cpp -o game -lsfml-graphics -lsfml-window -lsfml-system
+g++ *.cpp -o game -lsfml-graphics -lsfml-window -lsfml-system
 ./game
 ```
 
